@@ -1,0 +1,589 @@
+﻿@page "/admin"
+@using MySqlConnector
+@using database
+@using ORM
+
+<h3>Admin</h3>
+
+<hr />
+
+@if (IsVisiblePage)
+{
+
+    <table class="table table-striped">
+        <tbody>
+            <tr>
+                <td>
+                    <button class="btn btn-primary" @onclick="SearchBooksPage">Search Books</button>
+                </td>
+                <td>
+                    <button class="btn btn-primary" @onclick="SearchMembersPage">Search Members</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    
+    @if(IsVisibleBooks)
+    {
+        <h5>Search Books</h5>
+
+        <table class="table table-striped">
+            <tbody>
+                <tr>
+                    <th>
+                        <label for="columnNameBook">Search by: </label>
+                    </th>
+                    <th colspan="3">
+                        <select name="columnNameBook" @bind="columnNameBook">
+                            <option value="">Select an Option</option>
+                            <option value="Author">Author</option>
+                            <option value="Category">Category</option>
+                            <option value="Title">Book Title</option>
+                        </select>
+                    </th>
+                    <th>
+                        <label>Name: </label>
+                    </th>
+                    <td>
+                        <input placeholder="Name" @bind="identifier" id="SearchBook" />
+                    </td>
+                    <td>
+
+                    </td>
+                    <td>
+                        <button class="btn btn-primary" @onclick="Search">Search</button>
+                        <button class="btn btn-primary" @onclick="ReturnBookVis">Return Book</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h5>Books</h5>
+
+        <table class="table table-striped">
+            <tbody>
+                <tr>
+                    <th>
+                        Book Title
+                    </th>
+                    <th>
+                        Author
+                    </th>
+                    <th>
+                        Category
+                    </th>
+                </tr>
+                @foreach (string book in books)
+                {
+                    <tr>
+                        @foreach (string information in book.Split(","))
+                        {
+                            <td>
+                                @information
+                            </td>
+                        }
+                        <td>
+                            <button class="btn btn-primary" @onclick="() => Delete(book)">Delete</button>
+                            <button class="btn btn-primary" @onclick="() => Edit(book)">Edit</button>
+                            <button class="btn btn-primary" @onclick="() => ReserveBookVisibility(book)">Reserve Book</button>
+                        </td>
+                    </tr>
+                    //int index = books.IndexOf(book);
+                }
+            </tbody>
+        </table>
+    }
+
+    @if (IsVisibleEdit)
+    {
+        <h5>Edit Book</h5>
+
+        <table class="table table-striped">
+            <tbody>
+                <tr>
+                    @for (int i = 0; i < bookEditSplit.Length; i++)
+                    {
+                        editIndex = i;
+                        string book = bookEditSplit[i];
+                        <td>
+                            @book
+                        </td>
+                    }
+                </tr>
+                <tr>
+                    <th>
+                        Book Title: 
+                    </th>
+                    <td>
+                        <input @bind="bookEditTitle" id="EditTitle">
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <label for="editAuthor">Author: </label>
+                    </th>
+                    <td>
+                        <select name="editAuthor" @bind="bookEditAuthor">
+                            <option value="">Select an Option</option>
+                            <option value="1">Austin Kleon</option>
+                            <option value="2">Maurice Sendak</option>
+                            <option value="3">J.K. Rowling</option>
+                            <option value="4">Art Spiegelman</option>
+                            <option value="5">Marjane Satrapi</option>
+                            <option value="6">Craig Thompson</option>
+                            <option value="7">Marie Kondo</option>
+                            <option value="8">Joanna Gaines</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <label for="editCategory">Category: </label>
+                    </th>
+                    <td>
+                        <select name="editCategory" @bind="bookEditCategory">
+                            <option value="">Select an Option</option>
+                            <option value="1">Arts</option>
+                            <option value="2">Children's Books</option>
+                            <option value="3">Comics</option>
+                            <option value="4">Computer & Internet</option>
+                            <option value="5">Cooking & Food</option>
+                            <option value="6">Home</option>
+                            <option value="7">Health</option>
+                            <option value="8">Science</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+
+                    </th>
+                    <td>
+                        <button class="btn btn-primary" @onclick="Cancel">Cancel</button>
+                        <button class="btn btn-primary" @onclick="() => Submit(bookEditTitle, bookEditAuthor, bookEditCategory)">Confirm</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        
+        @*
+    <input placeholder="Name" id="EditBook"/>
+    <button class="btn btn-primary" @onclick="Cancel">Cancel</button>
+    <button class="btn btn-primary" @onclick="Submit">Submit</button>*@
+    }
+
+    @if(IsVisibleReserve)
+    {
+        <h5>Reserve Book</h5>
+
+        <table class="table table-striped">
+            <tbody>
+                <tr>
+                    <th>
+                        Member ID:
+                    </th>
+                    <td>
+                        <input placeholder="Member ID" @bind=memberIdReserve>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+
+                    </td>
+                    <td>
+                        <button class="btn btn-primary" @onclick="ReserveBook">Confirm</button>
+                        <button class="btn btn-primary" @onclick="Cancel">Cancel</button>
+                    </td>
+                </tr>
+                <tr>
+                    @if(bookReserved)
+                    {
+                        <th>
+                            <label>Book Reserved</label>
+                        </th>
+                        <td>
+                            <button class="btn btn-primary" @onclick="Cancel">Done</button>
+                        </td>
+                    }
+                </tr>
+            </tbody>
+        </table>
+    }
+
+    @if(IsVisibleReturn)
+    {
+        <h5>Return Book</h5>
+
+        <table class="table table-striped">
+            <tbody>
+                <tr>
+                    <th>
+                        <label>
+                            Member ID: 
+                        </label>
+                    </th>
+                    <td>
+                        <input placeholder="Member ID" @bind=memberIdReturn>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <label>
+                            Book Title: 
+                        </label>
+                    </th>
+                    <td>
+                        <input placeholder="Book Title" @bind=titleReturn>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+
+                    </th>
+                    <td>
+                        <button class="btn btn-primary" @onclick="ReturnBook">Confirm</button>
+                        <button class="btn btn-primary" @onclick="Cancel">Cancel</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    }
+
+    @if (IsVisibleMembers)
+    {
+        <h5>Search Members</h5>
+
+        <table class="table table-striped">
+            <tbody>
+                <tr>
+                    <th>
+                        <label for="columnNameMember">Search by: </label>
+                    </th>
+                    <td>
+                        <select name="columnNameMember" @bind="columnNameMember">
+                            <option value="">Select an Option</option>
+                            <option value="MemberID">ID</option>
+                            <option value="MemberName">Name</option>
+                        </select>
+                    </td>
+                    <th>
+                        Name/ID: 
+                    </th>
+                    <td>
+                        <input placeholder="Name or ID" @bind="identifierMember" id="SearchMember" />
+                    </td>
+                    <td>
+                        <button class="btn btn-primary" @onclick="SearchMember">Search</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h5>Members</h5>
+
+        <table class="table table-striped">
+            <tbody>
+                <tr>
+                    <th>
+                        ID
+                    </th>
+                    <th>
+                        Username
+                    </th>
+                    <th>
+                        Password
+                    </th>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Phone
+                    </th>
+                    <th>
+                        Email
+                    </th>
+                    <th>
+                        Street
+                    </th>
+                    <th>
+                        City
+                    </th>
+                    <th>
+                        Province
+                    </th>
+                </tr>
+                @foreach (ORM.Member member in members)
+                {
+                    <tr>
+                        @foreach (string memberInfo in member.ToString().Split(","))
+                        {
+                            <td>
+                                @memberInfo
+                            </td>
+                        }
+                        <td>
+                            <button class="btn btn-primary" @onclick="() => DeleteM(member)">Delete</button>
+                        </td>
+                    </tr>
+                    //int indexMember = members.IndexOf(member);
+                }
+            </tbody>
+        </table>
+    }
+
+    <table class="table table-striped">
+        <tbody>
+            <tr>
+                <td style="text-align: center;">
+                    <button class="btn btn-primary" @onclick="Logout">Logout</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+}
+else
+{
+    <h5>Login</h5>
+
+    <table class="table table-striped">
+        <tbody>
+            <tr>
+                <th>
+                    Username: 
+                </th>
+                <td>
+                    <input placeholder="Username">
+                </td>
+                <th>
+                    Password: 
+                </th>
+                <td>
+                    <input placeholder="Password" type="password">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="text-align: center;">
+                    <button class="btn btn-primary" @onclick="Login">Login</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    
+}
+
+
+@code {
+    private List<string> books = new();
+    private string[] bookEditSplit;
+    private List<ORM.Member> members = new List<ORM.Member>();
+    private string[] memberSplit;
+
+    //Search identifiers
+    private string columnNameBook;
+    private string identifier;
+    private string columnNameMember;
+    private string identifierMember;
+
+    //Editing book/member
+    private string bookEditTitle;
+    private string bookEditAuthor;
+    private string bookEditCategory;
+
+    //Reserving book
+    private string memberIdReserve;
+    private bool bookReserved;
+
+    //Returning book
+    private string memberIdReturn;
+    private string titleReturn;
+    private bool isReturned;
+
+    private int editIndex;
+    private int index;
+
+    //Visibility
+    private bool IsVisibleEdit = false;
+    private bool IsVisiblePage = false;
+    private bool IsVisibleReserve = false;
+    private bool IsVisibleReturn = false;
+    private bool IsVisibleBooks = false;
+    private bool IsVisibleMembers = false;
+
+    //Server
+    private static string server = "localhost";
+    private static string user = "root";
+    private static string pass = "0rb3n3tAngakongpassword!";
+    private static string db = "cprg211";
+
+    static DBConnections connect = new DBConnections();
+    DBManagerAdminBooks manager = new();
+    DBManagerAdminMembers managerMember = new();
+    MySqlConnection connection = connect.Connect(server, user, pass, db);
+
+
+    //Codes:
+
+    //Login and Logout
+
+    public void Login()
+    {
+        IsVisiblePage = true;
+    }
+
+    public void Logout()
+    { 
+        //Clears input fields and dropdowns
+        columnNameBook = null;
+        columnNameMember = null;
+        identifierMember = null;
+        identifier = null;
+
+        //Clears lists
+        books.Clear();
+        members.Clear();
+
+        //Makes page invisible
+        IsVisiblePage = false;
+    }
+
+
+    //Manage Books:
+
+    public void SearchBooksPage()
+    {
+        columnNameMember = null;
+        identifierMember = null;
+
+        IsVisibleMembers = false;
+        IsVisibleBooks = true;
+
+        members.Clear();
+    }
+
+    public void Search()
+    {
+        connect.OpenConnection(connection);
+
+        books = manager.SearchBook(connection, columnNameBook, identifier);
+
+        connect.CloseConnection(connection);
+    }
+
+    public void Edit(string bookInfo)
+    {
+        IsVisibleEdit = true;
+        index = books.IndexOf(bookInfo);
+        bookEditSplit = bookInfo.Split(",");
+    }
+
+    public void Cancel()
+    {
+        IsVisibleEdit = false;
+        IsVisibleReserve = false;
+        IsVisibleReturn = false;
+    }
+    public void Submit(string newTitle, string newAuthor, string category)
+    {
+        if(newTitle == null)
+        {
+            newTitle = bookEditSplit[0];
+        }
+
+        connect.OpenConnection(connection);
+
+        books[index] = manager.EditBook(connection, bookEditSplit[0], newTitle, bookEditSplit[1], newAuthor, category);
+
+        connect.CloseConnection(connection);
+
+        bookEditTitle = null;
+        bookEditAuthor = null;
+        bookEditCategory = null;
+
+        IsVisibleEdit = false;
+    }
+
+    public void Delete(string bookInfo)
+    {
+        index = books.IndexOf(bookInfo);
+
+        connect.OpenConnection(connection);
+
+        bool isDeleted = manager.DeleteBook(connect, connection, bookInfo.Split(", ")[0]);
+
+        if(isDeleted)
+        {
+            books.RemoveAt(index);
+        }
+        else
+        {
+            books[index] = bookInfo + " (Can't be deleted because it is reserved or loaned)";
+        }
+    }
+
+    public void ReserveBookVisibility(string bookInfo)
+    {
+        IsVisibleReserve = true;
+
+        index = books.IndexOf(bookInfo);
+
+        bookEditSplit = bookInfo.Split(",");
+    }
+
+    public void ReserveBook()
+    {
+        bookReserved = manager.ReserveBookAdmin(connect, connection, memberIdReserve, bookEditSplit[0]);
+    }
+
+    public void ReturnBookVis()
+    {
+        IsVisibleReturn = true;
+    }
+
+    public void ReturnBook()
+    {
+        isReturned = manager.ReturnBookAdmin(connect, connection, memberIdReturn, titleReturn);
+        if(isReturned)
+        {
+            IsVisibleReturn = false;
+        }
+    }
+
+
+    //Manage Members:
+
+    public void SearchMembersPage()
+    {
+        columnNameBook = null;
+        identifier = null;
+
+        IsVisibleBooks = false;
+        IsVisibleMembers = true;
+
+        books.Clear();
+    }
+
+    public void SearchMember()
+    {
+        connect.OpenConnection(connection);
+
+        members = managerMember.SearchMembers(connection, columnNameMember, identifierMember);
+
+        connect.CloseConnection(connection);
+    }
+
+    public void DeleteM(ORM.Member member)
+    {
+        index = members.IndexOf(member);
+        memberSplit = member.ToString().Split(",");
+
+        connect.OpenConnection(connection);
+
+        bool isDeletedMember = managerMember.DeleteMember(connect, connection, memberSplit[0]);
+
+        if(isDeletedMember)
+        {
+            members.RemoveAt(index);
+        }
+    }
+}
