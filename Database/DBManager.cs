@@ -627,7 +627,7 @@ namespace Database
 			{
 				return false;
 			}
-        }
+        	}
 
 		public static async Task<bool> AddReserved(string memberId, int bookId)
 		{
@@ -658,15 +658,15 @@ namespace Database
 			{
 				return false;
 			}
-        }
+        	}
 
 		public static async Task<bool> AddLoan(string memberId, int bookId)
 		{
-            bool connected = await Connect();
-            if (!connected)
-            {
-                return false;
-            }
+            		bool connected = await Connect();
+            		if (!connected)
+            		{
+                		return false;
+            		}
 
 			DateTime currentDate = DateTime.Now;
 			string startDate = currentDate.ToString("yyyy-MM-dd");
@@ -682,10 +682,10 @@ namespace Database
 				success = rowsAffected > 0;
 			}
 
-            Disconnect();
+            		Disconnect();
 
-            return success;
-        }
+            		return success;
+        	}
 
 		public static async Task<int> FindBookId(string bookTitle)
 		{
@@ -713,53 +713,53 @@ namespace Database
 
 		public static async Task<bool> DeleteReserved(int bookId, string memberId)
 		{
-            bool connected = await Connect();
-            if (!connected)
-            {
-                return false;
-            }
+            		bool connected = await Connect();
+            		if (!connected)
+            		{
+                		return false;
+            		}
 
-            string sql = $"DELETE FROM book_reserved WHERE id_member = {memberId} AND id_book = {bookId};";
+            		string sql = $"DELETE FROM book_reserved WHERE id_member = {memberId} AND id_book = {bookId};";
 
-            bool success = false;
+            		bool success = false;
 
-            using (MySqlCommand command = new MySqlCommand(sql, connection))
-            {
-                int rowsAffected = await command.ExecuteNonQueryAsync();
+            		using (MySqlCommand command = new MySqlCommand(sql, connection))
+            		{
+                		int rowsAffected = await command.ExecuteNonQueryAsync();
 
-                success = rowsAffected > 0;
-            }
+                		success = rowsAffected > 0;
+            		}
 
-            Disconnect();
+            		Disconnect();
 
-            return success;
-        }
+            		return success;
+        	}
 
 		public static async Task<bool> UpdateLoan(int bookId, string memberId)
 		{
-            bool connected = await Connect();
-            if (!connected)
-            {
-                return false;
-            }
+            		bool connected = await Connect();
+            		if (!connected)
+            		{
+                		return false;
+            		}
 
 			DateTime currentTime = DateTime.Now;
 			string returnDate = currentTime.ToString("yyyy-MM-dd");
 
-            string sql = $"UPDATE loan SET return_date = '{returnDate}' WHERE id_member = {memberId} AND id_book = {bookId};";
+            		string sql = $"UPDATE loan SET return_date = '{returnDate}' WHERE id_member = {memberId} AND id_book = {bookId};";
 
-            bool success = false;
+            		bool success = false;
 
-            using (MySqlCommand command = new MySqlCommand(sql, connection))
-            {
-                int rowsAffected = await command.ExecuteNonQueryAsync();
+            		using (MySqlCommand command = new MySqlCommand(sql, connection))
+            		{
+                		int rowsAffected = await command.ExecuteNonQueryAsync();
 
-                success = rowsAffected > 0;
-            }
+                		success = rowsAffected > 0;
+            		}
 
-            Disconnect();
+            		Disconnect();
 
-            return success;
-        }
-    }
+            		return success;
+        	}
+    	}
 }
