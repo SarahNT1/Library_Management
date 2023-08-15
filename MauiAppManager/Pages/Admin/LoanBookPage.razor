@@ -57,7 +57,7 @@
 
                 if (successful)
                 {
-                    bool succesfulQuan = await DBManager.UpdateQuantityLoan(books.Id_books);
+                    bool succesfulQuan = await DBManager.UpdateQuantityLoan(books.Id_book);
                     await App.Current.MainPage.DisplayAlert("Sucess", "Book Loaned", "OK");
                 }
                 else
