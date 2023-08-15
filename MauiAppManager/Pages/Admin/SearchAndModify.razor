@@ -147,19 +147,15 @@
 	{
 		book.Category = book.EditedCategory;
 
-		book.Quantity = book.EditedQuantity;		
+		book.Quantity = book.EditedQuantity;
 
 		book.Quantity = book.EditedQuantity;
-		book.Id_author = book.EditedAuthor;
-		authorId = Convert.ToInt32(name_author);
 
 		book.IsEditing = false;
 
 		await DBManager.UpdateBookCategory(book.Id_book, book.Category);
 		await DBManager.UpdateBookQuantity(book.Id_book, book.Quantity);
 
-		await DBManager.UpdateBookAuthor(book.Id_book, authorId);
-		
 		StateHasChanged();
 	}
 
