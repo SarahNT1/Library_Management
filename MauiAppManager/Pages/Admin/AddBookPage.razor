@@ -134,7 +134,13 @@
 
 
 @code {
-
+	/// <summary>
+	/// Library management System.
+	/// Add a Book page.
+	/// Take all the information staff provided is save to the CPRG211 Database.
+	/// </summary>
+	/// <remarks>Author: Jiyeon Heo, Sarah Tenebro, Tze-chi Chan</remarks>
+	/// <remarks>Date: August 15, 2023</remarks>
 
 	private int selectedYear = DateTime.Now.Year;
 	private int selectedMonth = DateTime.Now.Month;
@@ -160,6 +166,7 @@
 	private List<Publisher> publishers;
 	private List<Author> authors;
 
+	//Refresh the select menu
 	protected override async Task OnInitializedAsync()
 	{
 
@@ -171,7 +178,7 @@
 	}
 
 	BookManagement bookManagement = new BookManagement();
-
+	//It pass the book information to Bookmanagement.cs in the service forder.
 	private async Task HandleAddBookInfo()
 	{
 		bool result = await bookManagement.AddBookInfo(name_p, name_category, name_author, title, isbn, quantity, selectedYear, selectedMonth, selectedDay);
@@ -186,6 +193,7 @@
 		}
 	}
 
+	//Clear all information after adding
 	public void Clear()
 	{
 		name_p = "";
@@ -196,11 +204,13 @@
 		quantity = 0;
 	}
 
+	//Back to Main Admin page
 	public void BackToMainAdmin()
 	{
 		navigationManager.NavigateTo("mainAdmin");
 	}
 
+	//Logout, the user cannot use this system when they log out.
 	public async void LogOut()
 	{
 		navigationManager.NavigateTo("/");
