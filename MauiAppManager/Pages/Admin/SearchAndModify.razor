@@ -21,7 +21,10 @@
 			</td>
 			<td colspan="4"><input type="text" class="form-control" @bind="inputText" placeholder="" /></td>
 			<td><button type="button" class="btn btn-primary btn-info" @onclick="SearchBooks" disabled="@string.IsNullOrWhiteSpace(inputText)">Search</button></td>
+<<<<<<< HEAD
 			<td><button type="button" class="btn btn-primary btn-info" @onclick="ReturnBooks">Return</button></td>
+=======
+>>>>>>> main
 			<td><button type="button" class="btn btn-primary btn-info" @onclick="BackToMainAdmin">Back</button></td>
 		
 		</tr>
@@ -45,7 +48,28 @@
 		{
 			<tr>
 				<td colspan="4">@bookGroup.Key</td>
+<<<<<<< HEAD
 				<td>@string.Join(", ", bookGroup.Select(book => book.CombinedAuthors))</td>
+=======
+
+				<td>
+					@if (bookGroup.First().IsEditing)
+					{
+						<select class="form-control" @bind="name_author">
+							<option disabled selected>Select</option>
+							@foreach (var author in authors)
+							{
+								<option value="@author.Id_author">@($"{author.Fname_a} {author.Lname_a}")</option>
+							}
+						</select>
+					}
+					else
+					{
+						@string.Join(", ", bookGroup.Select(book => book.CombinedAuthors))
+					}		
+								
+				</td>
+>>>>>>> main
 				
 				<td>
 					@if (bookGroup.First().IsEditing)
@@ -80,7 +104,10 @@
 					else
 					{
 						<button type="button" class="btn btn-primary btn-info" @onclick="() => StartEditing(bookGroup.First())">Edit</button>
+<<<<<<< HEAD
 						<button type="button" class="btn btn-primary btn-info" @onclick="() => ToLoan(bookGroup.First())">Loan</button>
+=======
+>>>>>>> main
 						<button type="button" class="btn btn-primary btn-info" @onclick="()=>Delete(bookGroup.First())">Delete</button>
 					}
 				</td>
@@ -96,8 +123,17 @@
 	private string selectedSearchOption = "Title";
 	private string inputText;
 
+<<<<<<< HEAD
 	public List<SearchResultBook> searchResults = new List<SearchResultBook>();
 	private List<Category> categories;
+=======
+	private string name_author;
+	private int authorId;
+
+	public List<SearchResultBook> searchResults = new List<SearchResultBook>();
+	private List<Category> categories;
+	private List<Author> authors;
+>>>>>>> main
 
 	public async void SearchBooks()
 	{
@@ -114,7 +150,11 @@
 
 		//publishers = await DBManager.GetPublishers();
 		categories = await DBManager.GetCategories();
+<<<<<<< HEAD
 		//authors = await DBManager.GetAuthors();
+=======
+		authors = await DBManager.GetAuthors();
+>>>>>>> main
 
 		StateHasChanged();
 	}
@@ -124,17 +164,33 @@
 		book.IsEditing = true;
 		book.EditedCategory = book.Category;
 		book.EditedQuantity = book.Quantity;
+<<<<<<< HEAD
+=======
+		book.Editedtitle = book.Title;
+
+>>>>>>> main
 
 	}
 
 	public async Task ApplyChanges(SearchResultBook book)
 	{
 		book.Category = book.EditedCategory;
+<<<<<<< HEAD
 		book.Quantity = book.EditedQuantity;		
+=======
+		book.Quantity = book.EditedQuantity;
+		book.Id_author = book.EditedAuthor;
+		authorId = Convert.ToInt32(name_author);
+>>>>>>> main
 		book.IsEditing = false;
 
 		await DBManager.UpdateBookCategory(book.Id_book, book.Category);
 		await DBManager.UpdateBookQuantity(book.Id_book, book.Quantity);
+<<<<<<< HEAD
+=======
+		await DBManager.UpdateBookAuthor(book.Id_book, authorId);
+		
+>>>>>>> main
 		StateHasChanged();
 	}
 
@@ -156,6 +212,7 @@
 		}
 	}
 
+<<<<<<< HEAD
 	public async void ToLoan(SearchResultBook book)
 	{
 		LoanBookPage.books = book;
@@ -166,4 +223,6 @@
 	{
 		navigationManager.NavigateTo("returnBook");
 	}
+=======
+>>>>>>> main
 }
