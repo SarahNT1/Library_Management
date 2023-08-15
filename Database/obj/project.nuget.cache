@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "l//+ox1e+pMsHwq+9AjfQobk5jn9RnwcC2xWfPSXzfSwHm2a8AOPO4Bv7Zrq010z0eh6MkHgHlClboiNywPYJA==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\tzechichan\\Downloads\\LibraryManagement(version3)\\LibraryManagement\\LibraryManagement\\Database\\Database.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\tzechichan\\.nuget\\packages\\mysqlconnector\\2.2.7\\mysqlconnector.2.2.7.nupkg.sha512"
+  ],
+  "logs": []
+}
