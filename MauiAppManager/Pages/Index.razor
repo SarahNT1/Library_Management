@@ -1,0 +1,85 @@
+﻿@page "/"
+
+@using ORM
+@using Database
+
+@inject NavigationManager navigationManager
+
+
+<h1>Welcome to JTS Library.</h1>
+
+<table class="table table-striped">
+	<tbody>
+		<tr>
+			<th>ID:</th>
+			<td colspan="2">
+				<input type="text" @bind="id_login" class="form-control" placeholder="ID" />
+			</td>
+			
+		</tr>
+		<tr>
+			<th>Password</th>
+			<td>
+				<input type="password" @bind="password_login" class="form-control" placeholder="Password" />
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<div class="col-md-6">
+	<button type="button" class="btn btn-primary" @onclick="AdminLogin">Admin Login</button>
+</div>
+
+
+@code{
+	public string id_login;
+	public string password_login;
+	//private Member member;
+	private bool IsAdmin = false;
+
+	//public async Task LogIn()
+	//{
+
+	//	bool connect = await DBManager.Connect();
+
+	//	if(connect)
+	//	{
+	//		member = (Member)DBManager.FindMemberInfo(id_login);
+
+	//		if(member == null)
+	//		{
+	//			await App.Current.MainPage.DisplayAlert("Wrong ID", "Your ID does not exist", "OK");
+	//		}else if(member.Password_m != password_login)
+	//		{
+	//			await App.Current.MainPage.DisplayAlert("Wrong password", "ID and Password are not matching", "OK");
+	//		}
+	//		else
+	//		{
+
+	//			navigationManager.NavigateTo($"/mainMember/{member.Login_m}");
+	//		}
+
+	//	}
+	//	DBManager.Disconnect();
+
+	//}
+
+	//public void Register()
+	//{
+	//	navigationManager.NavigateTo("registration");
+	//}
+
+	public async void AdminLogin()
+	{
+		if (id_login == "admin" && password_login == "1234")
+		{
+			IsAdmin = true;
+			navigationManager.NavigateTo($"/mainAdmin/");
+		}
+		else
+		{
+			await App.Current.MainPage.DisplayAlert("Error", "Check your id and password as Administrator", "OK");
+		}
+	}
+
+}

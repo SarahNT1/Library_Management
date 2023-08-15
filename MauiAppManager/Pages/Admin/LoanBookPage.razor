@@ -1,0 +1,69 @@
+﻿@page "/loanBook"
+
+@using System.Data
+@using Database
+@using ORM
+@using MauiAppManager.Data
+@inject NavigationManager navigationManager
+
+<h3>Loan</h3>
+
+<table class="table table-striped">
+    <tbody>
+        <tr>
+            <th>
+                Loan book: 
+            </th>
+            <td>
+                @books.Title
+            </td>
+        </tr>
+        <tr>
+            <th>
+                Member ID:
+            </th>
+            <td>
+                <input type="text" class="form-control" @bind="memberIdInput"/>
+            </td>
+            <td>
+                <button class="btn btn-primary btn-info" @onclick="CancelLoan">Back</button>
+                <button class="btn btn-primary btn-info" @onclick="LoanBook" disabled="@string.IsNullOrWhiteSpace(memberIdInput)">Confirm</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+@code {
+    public static SearchResultBook books { get; set; }
+    private string memberIdInput;
+    private bool successful = false;
+
+    public async void CancelLoan()
+    {
+        navigationManager.NavigateTo("searchAndModify");
+    }
+
+    public async void LoanBook()
+    {
+        bool isAvailable = await DBManager.CheckAvailability(books.Id_book);
+
+        if(isAvailable)
+        {
+            bool success = await DBManager.AddReserved(memberIdInput, books.Id_book);
+            successful = await DBManager.AddLoan(memberIdInput, books.Id_book);
+
+            if (successful)
+            {
+                await App.Current.MainPage.DisplayAlert("Sucess", "Book Loaned", "OK");
+            }
+            else
+            {
+                await App.Current.MainPage.DisplayAlert("Error", "Loan unsuccessful or an error occurred.", "OK");
+            }
+        }
+        else
+        {
+            await App.Current.MainPage.DisplayAlert("Error", "This book is unavailable or an error occurred.", "OK");
+        }
+    }
+}
