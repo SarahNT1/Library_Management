@@ -118,6 +118,15 @@
 
 
 @code {
+
+	/// <summary>
+	/// Library management System.
+	/// Add a Member page.
+	/// Take all the information staff provided is save to the CPRG211 Database.
+	/// </summary>
+	/// <remarks>Author: Jiyeon Heo, Sarah Tenebro, Tze-chi Chan</remarks>
+	/// <remarks>Date: August 15, 2023</remarks>
+
 	private string login_m;
 	private string password;
 	private string confirmPassword;
@@ -252,6 +261,7 @@
 		}
 	}
 
+	//Clear all information after adding
 	public void Clear()
 	{
 		login_m = "";
@@ -268,6 +278,8 @@
 		city = "";
 		province = "";
 	}
+
+	//Back to Main Admin page
 	public void BackToMainAdmin()
 	{
 		navigationManager.NavigateTo("mainAdmin");
