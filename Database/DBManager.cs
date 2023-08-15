@@ -14,6 +14,10 @@ namespace Database
 	public class DBManager
 	{
 		private static MySqlConnection connection;
+		/// <summary>
+		/// Connect to the database
+		/// </summary>
+		/// <returns>True if it is connected</returns>
 		public static async Task<bool> Connect()
 		{
 			MySqlConnectionStringBuilder builder = new MySqlConnectionStringBuilder()
@@ -38,7 +42,9 @@ namespace Database
 
 		}
 
-
+		/// <summary>
+		/// Disconnect to database
+		/// </summary>
 		public static void Disconnect()
 		{
 			if (connection != null && connection.State == ConnectionState.Open)
@@ -46,7 +52,10 @@ namespace Database
 				connection.Close();
 			}
 		}
-
+		/// <summary>
+		/// Check if DB connected with program
+		/// </summary>
+		/// <returns>True if it is connected</returns>
 		public static bool IsConnected()
 		{
 			if (connection != null && connection.State == ConnectionState.Open)
@@ -58,7 +67,10 @@ namespace Database
 				return false;
 			}
 		}
-
+		/// <summary>
+		/// Find all members in the member table
+		/// </summary>
+		/// <returns>Member list</returns>
 		public static List<Member> GetAllMember()
 		{
 			List<Member> list = new List<Member>();
@@ -91,7 +103,12 @@ namespace Database
 			return list;
 
 		}
-
+		
+		/// <summary>
+		/// Find member by table primary key(ID)
+		/// </summary>
+		/// <param name="inputId">Value to find</param>
+		/// <returns>A member</returns>
 		public static Object GetOneMember(string inputId)
 		{
 			string sql = "select * from member where id_member = " + inputId;
@@ -118,6 +135,11 @@ namespace Database
 
 		}
 
+		/// <summary>
+		/// Find member my login ID
+		/// </summary>
+		/// <param name="id_login">Value to find</param>
+		/// <returns>A member</returns>
 		public static Object FindMemberInfo(string id_login)
 		{
 			string sql = "select * from member where Login_m = '" + id_login + "'";
@@ -143,6 +165,10 @@ namespace Database
 			return member;
 		}
 
+		/// <summary>
+		/// Get a category list from the category table
+		/// </summary>
+		/// <returns>A list of category</returns>
 		public static async Task<List<Category>> GetCategories()
 		{
 			bool connected = await Connect();
@@ -175,6 +201,10 @@ namespace Database
 
 		}
 
+		/// <summary>
+		/// Get publishser list from the publisher table
+		/// </summary>
+		/// <returns>A list of publisher</returns>
 		public static async Task<List<Publisher>> GetPublishers()
 		{
 			List<Publisher> list = new List<Publisher>();
@@ -205,6 +235,10 @@ namespace Database
 			return list;
 		}
 
+		/// <summary>
+		/// Get author list from the author table
+		/// </summary>
+		/// <returns>A list of author</returns>
 		public static async Task<List<Author>> GetAuthors()
 		{
 			List<Author> list = new List<Author>();
@@ -236,6 +270,11 @@ namespace Database
 
 		}
 
+		/// <summary>
+		/// Add a book to the book table
+		/// </summary>
+		/// <param name="book">Value to append</param>
+		/// <returns>Primary key of the book</returns>
 		public static async Task<int> InsertBook(Book book)
 		{
 			bool connected = await Connect();
@@ -260,7 +299,7 @@ namespace Database
 				if (int.TryParse(result.ToString(), out int insertedId))
 				{
 					Disconnect();
-					return insertedId;
+					return insertedId; // Indicate failure
 				}
 				else
 				{
@@ -270,6 +309,11 @@ namespace Database
 			}
 		}
 
+		/// <summary>
+		/// Add to the book_author table(bridge table between book and author)
+		/// </summary>
+		/// <param name="book_Author">Value to append.</param>
+		/// <returns>True if the value added</returns>
 		public static async Task<bool> InsertBookAuthor(Book_Author book_Author)
 		{
 			bool connected = await Connect();
@@ -288,6 +332,12 @@ namespace Database
 
 		}
 
+		/// <summary>
+		/// Search book by ID, Title, or Author
+		/// </summary>
+		/// <param name="selectedSearchOption">Value to find</param>
+		/// <param name="inputText">Value to find</param>
+		/// <returns>A list of books.</returns>
 		public static async Task<List<SearchResultBook>> SearchBooksBy(string selectedSearchOption, string inputText)
 		{
 			bool connected = await Connect();
@@ -353,6 +403,12 @@ namespace Database
 			}
 		}
 
+		/// <summary>
+		/// Update the category of a book
+		/// </summary>
+		/// <param name="bookId">Value to find</param>
+		/// <param name="newCategory">Value to change</param>
+		/// <returns>Task<bool> if it changed successfully.</bool></returns>
 		public static async Task<bool> UpdateBookCategory(int bookId, string newCategory)
 		{
 			bool connected = await Connect();
@@ -377,6 +433,12 @@ namespace Database
 
 		}
 
+		/// <summary>
+		/// Update the quantity of a book
+		/// </summary>
+		/// <param name="bookId">Value to find</param>
+		/// <param name="newQuantity">Value to change</param>
+		/// <returns>Task<bool> if it changed successfully.</returns>
 		public static async Task<bool> UpdateBookQuantity(int bookId, int newQuantity)
 		{
 			bool connected = await Connect();
@@ -400,6 +462,12 @@ namespace Database
 			}
 		}
 
+		/// <summary>
+		/// Update the author of a book
+		/// </summary>
+		/// <param name="bookId">Value to Find</param>
+		/// <param name="authorId">Value to changed</param>
+		/// <returns>Task<bool> if it changed successfully.</returns>
 		public static async Task<bool> UpdateBookAuthor(int bookId, int authorId)
 		{
 			bool connected = await Connect();
@@ -423,6 +491,11 @@ namespace Database
 			}
 		}
 
+		/// <summary>
+		/// Delete book from the book_author, loan, and book table
+		/// </summary>
+		/// <param name="bookId">Value to delete</param>
+		/// <returns>Task<bool> if it delete successfully</returns>
 		public static async Task<bool> DeleteBook(int bookId)
 		{
 			//Check bridging tables if the book is there or not
@@ -478,6 +551,11 @@ namespace Database
 			}
 		}
 
+		/// <summary>
+		/// Check ID when a member register
+		/// </summary>
+		/// <param name="id">Value to find</param>
+		/// <returns>Task<bool> if there is a memeber who has the same ID</returns>
 		public static async Task<bool> IsIdDuplicated(string id)
 		{
 			bool connected = await Connect();
@@ -501,6 +579,11 @@ namespace Database
 			}
 		}
 
+		/// <summary>
+		/// Add a memeber to the member table
+		/// </summary>
+		/// <param name="member">Value to append</param>
+		/// <returns>Task<bool> if it add membe successfully. </returns>
 		public static async Task<bool> AddMember(Member member)
 		{
 			bool connected = await Connect();
@@ -532,6 +615,12 @@ namespace Database
 			}
 		}
 
+		/// <summary>
+		/// Search a member by ID or name from member table.
+		/// </summary>
+		/// <param name="selectedSearchOption">Option values to find</param>
+		/// <param name="inputText">Value to find</param>
+		/// <returns>A list of member</returns>
 		public static async Task<List<Member>> SearchMembersBy(string selectedSearchOption, string inputText)
 		{
 			bool connected = await Connect();
@@ -593,6 +682,11 @@ namespace Database
 			}
 		}
 
+		/// <summary>
+		/// Update member information
+		/// </summary>
+		/// <param name="member">A member</param>
+		/// <returns>True if it updated successfully.</returns>
 		public static async Task<bool> UpdateMemberInfo(Member member)
 		{
 			bool connected = await Connect();
