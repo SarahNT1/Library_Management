@@ -34,3 +34,15 @@ C:\Visual Studio - MAUI\SAIT_Library_Official\LibraryManagement\Library_Manageme
 C:\Visual Studio - MAUI\SAIT_Library_Official\LibraryManagement\Library_Management\ORM\obj\Debug\net6.0\refint\ORM.dll
 C:\Visual Studio - MAUI\SAIT_Library_Official\LibraryManagement\Library_Management\ORM\obj\Debug\net6.0\ORM.pdb
 C:\Visual Studio - MAUI\SAIT_Library_Official\LibraryManagement\Library_Management\ORM\obj\Debug\net6.0\ref\ORM.dll
+C:\Users\jiyeo\OneDrive\Desktop\CPRG211_B\z_Final\Library_Management\ORM\bin\Debug\net6.0\ORM.deps.json
+C:\Users\jiyeo\OneDrive\Desktop\CPRG211_B\z_Final\Library_Management\ORM\bin\Debug\net6.0\ORM.dll
+C:\Users\jiyeo\OneDrive\Desktop\CPRG211_B\z_Final\Library_Management\ORM\bin\Debug\net6.0\ORM.pdb
+C:\Users\jiyeo\OneDrive\Desktop\CPRG211_B\z_Final\Library_Management\ORM\obj\Debug\net6.0\ORM.csproj.AssemblyReference.cache
+C:\Users\jiyeo\OneDrive\Desktop\CPRG211_B\z_Final\Library_Management\ORM\obj\Debug\net6.0\ORM.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\jiyeo\OneDrive\Desktop\CPRG211_B\z_Final\Library_Management\ORM\obj\Debug\net6.0\ORM.AssemblyInfoInputs.cache
+C:\Users\jiyeo\OneDrive\Desktop\CPRG211_B\z_Final\Library_Management\ORM\obj\Debug\net6.0\ORM.AssemblyInfo.cs
+C:\Users\jiyeo\OneDrive\Desktop\CPRG211_B\z_Final\Library_Management\ORM\obj\Debug\net6.0\ORM.csproj.CoreCompileInputs.cache
+C:\Users\jiyeo\OneDrive\Desktop\CPRG211_B\z_Final\Library_Management\ORM\obj\Debug\net6.0\ORM.dll
+C:\Users\jiyeo\OneDrive\Desktop\CPRG211_B\z_Final\Library_Management\ORM\obj\Debug\net6.0\refint\ORM.dll
+C:\Users\jiyeo\OneDrive\Desktop\CPRG211_B\z_Final\Library_Management\ORM\obj\Debug\net6.0\ORM.pdb
+C:\Users\jiyeo\OneDrive\Desktop\CPRG211_B\z_Final\Library_Management\ORM\obj\Debug\net6.0\ref\ORM.dll
