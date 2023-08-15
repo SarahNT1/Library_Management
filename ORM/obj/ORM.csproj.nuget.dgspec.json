@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Visual Studio - MAUI\\SAIT_Library_Official\\LibraryManagement\\Library_Management\\ORM\\ORM.csproj": {}
+    "C:\\Users\\jiyeo\\OneDrive\\Desktop\\CPRG211_B\\z_Final\\Library_Management\\ORM\\ORM.csproj": {}
   },
   "projects": {
-    "C:\\Visual Studio - MAUI\\SAIT_Library_Official\\LibraryManagement\\Library_Management\\ORM\\ORM.csproj": {
+    "C:\\Users\\jiyeo\\OneDrive\\Desktop\\CPRG211_B\\z_Final\\Library_Management\\ORM\\ORM.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Visual Studio - MAUI\\SAIT_Library_Official\\LibraryManagement\\Library_Management\\ORM\\ORM.csproj",
+        "projectUniqueName": "C:\\Users\\jiyeo\\OneDrive\\Desktop\\CPRG211_B\\z_Final\\Library_Management\\ORM\\ORM.csproj",
         "projectName": "ORM",
-        "projectPath": "C:\\Visual Studio - MAUI\\SAIT_Library_Official\\LibraryManagement\\Library_Management\\ORM\\ORM.csproj",
-        "packagesPath": "C:\\Users\\SNPOR\\.nuget\\packages\\",
-        "outputPath": "C:\\Visual Studio - MAUI\\SAIT_Library_Official\\LibraryManagement\\Library_Management\\ORM\\obj\\",
+        "projectPath": "C:\\Users\\jiyeo\\OneDrive\\Desktop\\CPRG211_B\\z_Final\\Library_Management\\ORM\\ORM.csproj",
+        "packagesPath": "C:\\Users\\jiyeo\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\jiyeo\\OneDrive\\Desktop\\CPRG211_B\\z_Final\\Library_Management\\ORM\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\SNPOR\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\jiyeo\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],

@@ -72,7 +72,7 @@
 	// Log in for administrator
 	public async void AdminLogin()
 	{
-		if (IsConnected) // check id and password
+		if (id_login == "admin" && password_login == "1234") // check id and password
 		{
 			IsAdmin = true;
 			navigationManager.NavigateTo($"/mainAdmin/");
