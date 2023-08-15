@@ -21,6 +21,9 @@
 			</td>
 			<td colspan="4"><input type="text" class="form-control" @bind="inputText" placeholder="" /></td>
 			<td><button type="button" class="btn btn-primary btn-info" @onclick="SearchBooks" disabled="@string.IsNullOrWhiteSpace(inputText)">Search</button></td>
+
+			<td><button type="button" class="btn btn-primary btn-info" @onclick="ReturnBooks">Return</button></td>
+
 			<td><button type="button" class="btn btn-primary btn-info" @onclick="BackToMainAdmin">Back</button></td>
 		
 		</tr>
@@ -45,6 +48,9 @@
 			<tr>
 				<td colspan="4">@bookGroup.Key</td>
 
+				<td>@string.Join(", ", bookGroup.Select(book => book.CombinedAuthors))</td>
+
+
 				<td>
 					@if (bookGroup.First().IsEditing)
 					{
@@ -62,6 +68,7 @@
 					}		
 								
 				</td>
+
 				
 				<td>
 					@if (bookGroup.First().IsEditing)
@@ -96,6 +103,9 @@
 					else
 					{
 						<button type="button" class="btn btn-primary btn-info" @onclick="() => StartEditing(bookGroup.First())">Edit</button>
+
+						<button type="button" class="btn btn-primary btn-info" @onclick="() => ToLoan(bookGroup.First())">Loan</button>
+
 						<button type="button" class="btn btn-primary btn-info" @onclick="()=>Delete(bookGroup.First())">Delete</button>
 					}
 				</td>
@@ -118,6 +128,7 @@
 	private List<Category> categories;
 	private List<Author> authors;
 
+
 	public async void SearchBooks()
 	{
 		if (!string.IsNullOrEmpty(selectedSearchOption) && !string.IsNullOrEmpty(inputText))
@@ -133,7 +144,11 @@
 
 		//publishers = await DBManager.GetPublishers();
 		categories = await DBManager.GetCategories();
+
+		//authors = await DBManager.GetAuthors();
+
 		authors = await DBManager.GetAuthors();
+
 
 		StateHasChanged();
 	}
@@ -143,21 +158,25 @@
 		book.IsEditing = true;
 		book.EditedCategory = book.Category;
 		book.EditedQuantity = book.Quantity;
+
 		book.Editedtitle = book.Title;
-
-
 	}
 
 	public async Task ApplyChanges(SearchResultBook book)
 	{
 		book.Category = book.EditedCategory;
+
+		book.Quantity = book.EditedQuantity;		
+
 		book.Quantity = book.EditedQuantity;
 		book.Id_author = book.EditedAuthor;
 		authorId = Convert.ToInt32(name_author);
+
 		book.IsEditing = false;
 
 		await DBManager.UpdateBookCategory(book.Id_book, book.Category);
 		await DBManager.UpdateBookQuantity(book.Id_book, book.Quantity);
+
 		await DBManager.UpdateBookAuthor(book.Id_book, authorId);
 		
 		StateHasChanged();
@@ -179,6 +198,18 @@
 		{
 			await App.Current.MainPage.DisplayAlert("Sorry", "Can't be deleted because it is reserved or loaned", "OK");
 		}
+	}
+
+
+	public async void ToLoan(SearchResultBook book)
+	{
+		LoanBookPage.books = book;
+		navigationManager.NavigateTo("loanBook");
+	}
+
+	public async void ReturnBooks()
+	{
+		navigationManager.NavigateTo("returnBook");
 	}
 
 }

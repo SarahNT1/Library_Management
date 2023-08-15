@@ -616,5 +616,173 @@ namespace Database
 			}
 
 		}
+
+		public static async Task<bool> CheckAvailability(int bookId)
+		{
+			try
+			{
+				bool connected = await Connect();
+				if (!connected)
+				{
+					return false;
+				}
+
+				string sql = $"SELECT is_available FROM book WHERE id_book = {bookId};";
+
+				bool available = false;
+
+				using (MySqlCommand command = new MySqlCommand(sql, connection))
+				{
+					using (MySqlDataReader reader = await command.ExecuteReaderAsync())
+					{
+						while (reader.Read())
+						{
+							available = Convert.ToBoolean(reader.GetInt32(0));
+						}
+					}
+				}
+
+				Disconnect();
+
+				return available;
+			}
+			catch(Exception ex)
+			{
+				return false;
+			}
+        	}
+
+		public static async Task<bool> AddReserved(string memberId, int bookId)
+		{
+			try
+			{
+				bool connected = await Connect();
+				if (!connected)
+				{
+					return false;
+	}
+
+				string sql = $"INSERT INTO book_reserved(id_book, id_member, status_reserved) VALUES({bookId}, {memberId}, 0);";
+
+				bool success = false;
+
+				using (MySqlCommand command = new MySqlCommand(sql, connection))
+				{
+					int rowsAffected = await command.ExecuteNonQueryAsync();
+
+					success = rowsAffected > 0;
+				}
+
+				Disconnect();
+
+				return success;
+			}
+			catch(Exception ex)
+			{
+				return false;
+			}
+        	}
+
+		public static async Task<bool> AddLoan(string memberId, int bookId)
+		{
+            		bool connected = await Connect();
+            		if (!connected)
+            		{
+                		return false;
+            		}
+
+			DateTime currentDate = DateTime.Now;
+			string startDate = currentDate.ToString("yyyy-MM-dd");
+
+			string sql = $"INSERT INTO loan(id_book, id_member, start_date, return_date) VALUES({bookId}, {memberId}, '{startDate}', '{startDate}');";
+
+			bool success = false;
+
+			using(MySqlCommand command = new MySqlCommand(sql, connection))
+			{
+				int rowsAffected = await command.ExecuteNonQueryAsync();
+
+				success = rowsAffected > 0;
+			}
+
+            		Disconnect();
+
+            		return success;
+        	}
+
+		public static async Task<int> FindBookId(string bookTitle)
+		{
+			bool connected = await Connect();
+
+			string sql = $"SELECT id_book FROM book WHERE title = '{bookTitle}';";
+
+			int bookId = 0;
+
+			using (MySqlCommand command = new MySqlCommand(sql, connection))
+			{
+				using (MySqlDataReader reader = await command.ExecuteReaderAsync())
+				{
+					while (reader.Read())
+					{
+						bookId = reader.GetInt32(0);
+					}
+				}
+
+				Disconnect();
+
+				return bookId;
+			}
+		}
+
+        public static async Task<bool> DeleteReserved(int bookId, string memberId)
+        {
+			bool connected = await Connect();
+			if (!connected)
+			{
+				return false;
+			}
+
+			string sql = $"DELETE FROM book_reserved WHERE id_member = {memberId} AND id_book = {bookId};";
+
+			bool success = false;
+
+			using (MySqlCommand command = new MySqlCommand(sql, connection))
+			{
+				int rowsAffected = await command.ExecuteNonQueryAsync();
+
+				success = rowsAffected > 0;
+			}
+
+			Disconnect();
+
+			return success;
+		}
+
+		public static async Task<bool> UpdateLoan(int bookId, string memberId)
+	    {
+			bool connected = await Connect();
+		    if (!connected)
+	        {
+                return false;
+			}
+
+		    DateTime currentTime = DateTime.Now;
+	        string returnDate = currentTime.ToString("yyyy-MM-dd");
+
+            string sql = $"UPDATE loan SET return_date = '{returnDate}' WHERE id_member = {memberId} AND id_book = {bookId};";
+
+			bool success = false;
+
+		    using (MySqlCommand command = new MySqlCommand(sql, connection))
+	        {
+                int rowsAffected = await command.ExecuteNonQueryAsync();
+
+				success = rowsAffected > 0;
+			}
+
+		    Disconnect();
+
+		        return success;
+	    }
 	}
 }
