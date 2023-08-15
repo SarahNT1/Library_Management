@@ -1,0 +1,153 @@
+﻿@page "/searchAndModifyMember"
+
+@using System.Data
+@using Database
+@using ORM
+@using MauiAppManager.Data
+@inject NavigationManager navigationManager
+
+<h3>Search And Modify</h3>
+
+<table class="table table-striped">
+	<tbody>
+		<tr>
+			<th>Search By</th>
+			<td>
+				<select class="form-control" @bind="selectedSearchOption">
+					<option value="Name">Name</option>
+					<option value="ID">ID</option>
+				</select>
+			</td>
+			<td colspan="4"><input type="text" class="form-control" @bind="inputText" placeholder="" /></td>
+			<td><button type="button" class="btn btn-primary btn-info" @onclick="SearchBooks" disabled="@string.IsNullOrWhiteSpace(inputText)">Search</button></td>
+			<td><button type="button" class="btn btn-primary btn-info" @onclick="BackToMainAdmin">Back</button></td>
+
+		</tr>
+	</tbody>
+</table>
+
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>ID</th>
+			<th>First Name</th>
+			<th>Last Name</th>
+			<th>Phone Number</th>
+			<th>Email</th>
+			<th>Loan</th>
+			<th>Reserve</th>
+
+		</tr>
+
+	</thead>
+	<tbody>
+		@foreach (var member in searchResults)
+		{
+			<tr>
+				<td >@member.Id_member</td>
+				<td>@member.Fname_m</td>
+				<td>@member.Lname_m</td>
+
+				<td>
+					@if (IsEditing)
+					{
+						<input type="text" @bind="EditedPhoneNumber" class="form-control" minlength="10" maxlength="10" />
+					}
+					else
+					{
+						@member.Phone_m
+					}
+				</td>
+				<td>
+					@if (IsEditing)
+					{
+						<input type="text" class="form-control" @bind="EditedEmail" />
+					}
+					else
+					{
+						@member.Email_m
+					}
+				</td>
+				<td>
+					@if (IsEditing)
+					{
+						<button type="button" class="btn btn-primary btn-info" @onclick="() => ApplyChanges(member)">Save</button>
+					}
+					else
+					{
+						<button type="button" class="btn btn-primary btn-info" @onclick="() => StartEditing(member)">Edit</button>
+						<button type="button" class="btn btn-primary btn-info" @onclick="Delete">Delete</button>
+					}
+				</td>
+
+			</tr>
+		}
+
+	</tbody>
+</table>
+
+@code {
+
+	private string selectedSearchOption = "ID";
+	private string inputText;
+	private bool IsEditing{ get; set; }
+	private int EditedPhoneNumber;
+	private string EditedEmail;
+
+
+	public List<Member> searchResults = new List<Member>();
+	private List<Category> categories;
+	private Member member;
+
+	public async void SearchBooks()
+	{
+		if (!string.IsNullOrEmpty(selectedSearchOption) && !string.IsNullOrEmpty(inputText))
+		{
+			searchResults = await DBManager.SearchMembersBy(selectedSearchOption, inputText);
+			StateHasChanged();
+		}
+
+	}
+		
+	private async Task StartEditing(Member member)
+	{
+		IsEditing = true;
+		if (int.TryParse(member.Phone_m, out int parsedPhoneNumber))
+		{
+			EditedPhoneNumber = parsedPhoneNumber;
+		}
+		else
+		{
+			// Handle invalid phone number input
+		}
+
+		EditedEmail = member.Email_m;
+
+	}
+
+	public async Task ApplyChanges(Member member)
+	{
+		if (EditedPhoneNumber.ToString().Length != 10)
+		{
+			// Display an error message or handle the invalid phone number
+			return;
+		}
+
+		IsEditing = false;
+		member.Phone_m = EditedPhoneNumber.ToString();
+		member.Email_m = EditedEmail;
+
+		await DBManager.UpdateMemberInfo(member);
+		SearchBooks(); // Refresh the search results after updating the member info
+	}
+
+	public void BackToMainAdmin()
+	{
+		navigationManager.NavigateTo("mainAdmin");
+	}
+
+	public async void Delete()
+	{
+
+	}
+}

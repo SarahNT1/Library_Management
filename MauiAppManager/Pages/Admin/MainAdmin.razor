@@ -1,0 +1,64 @@
+﻿@page "/mainAdmin"
+
+@using ORM
+@using Database
+@inject NavigationManager navigationManager
+
+<h3>Menu</h3>
+
+
+
+<table class="table table-striped">
+	<tbody>
+		<tr>
+			<th>Books</th>
+			<td>
+				<button class="btn btn-primary" @onclick="AddBook">Add Book</button>
+			</td>
+			<td>
+				<button class="btn btn-primary" @onclick="Search">Search & Modify</button>
+			</td>
+		</tr>
+		<tr>
+			<th>Member</th>
+			<td>
+				<button class="btn btn-primary" @onclick="AddMember">Add Member</button>
+			</td>
+			<td>
+				<button class="btn btn-primary" @onclick="SearchMember">Search & Modify Member</button>
+			</td>
+		</tr>
+		
+	</tbody>
+</table>
+
+<div class="col-md-6">
+	<button type="button" class="btn btn-primary" @onclick="LogOut">Log out</button>
+</div>
+
+@code {
+    public async void AddBook()
+    {
+        navigationManager.NavigateTo("addBookPage");
+    }
+
+    public async void Search()
+    {
+        navigationManager.NavigateTo("searchAndModify");
+    }
+
+	public async void AddMember()
+	{
+		navigationManager.NavigateTo("addMemberPage");
+	}
+
+	public async void SearchMember()
+	{
+		navigationManager.NavigateTo("searchAndModifyMember");
+	}
+
+	public async void LogOut()
+	{
+		navigationManager.NavigateTo("/");
+	}
+}
