@@ -1,0 +1,12 @@
+﻿@page "/mainMember/{login}"
+
+@using ORM
+@using Database
+@inject NavigationManager navigationManager
+
+<p>Welcome, @Login</p>
+
+@code {
+    [Parameter]
+    public string Login { get; set; }
+}

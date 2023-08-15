@@ -1,0 +1,276 @@
+﻿@page "/addMemberPage"
+
+@using System.Data
+@using Database
+@using ORM
+@inject NavigationManager navigationManager
+
+<h3>AddMemberPage</h3>
+
+<table class="table table-striped">
+	<tbody>
+		<tr>
+			<th>ID</th>
+			<td colspan="2">
+				<input type="text" @bind="login_m" class="form-control" placeholder="ID" />
+			</td>
+			<td>
+				<button class="btn btn-primary" @onclick="CheckID">Check</button>
+			</td>
+		</tr>
+		<tr>
+			<th>Password</th>
+			<td>
+				<input type="password" @bind="password" class="form-control" placeholder="Password" />
+			</td>
+			<td>
+				<input type="password" @bind="confirmPassword" class="form-control" placeholder="Confrim" />
+			</td>
+			<td><button class="btn btn-primary" @onclick="CheckPasswords">Check</button></td>
+		</tr>
+		<tr>
+			<th>First Name</th>
+			<td>
+				<input type="text" @bind="firstname" class="form-control" placeholder="First Name" />
+			</td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<th>Last Name</th>
+			<td>
+				<input type="text" @bind="lastname" class="form-control" placeholder="Last Name" />
+			</td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<th>Phone Number</th>
+			<td>
+				<input type="text" @bind="phonePart1" class="form-control" maxlength="3" />
+			</td>
+			<td>
+				<input type="text" @bind="phonePart2" class="form-control" maxlength="3" />
+			</td>
+			<td><input type="text" @bind="phonePart3" class="form-control" maxlength="4" /></td>
+		</tr>
+		<tr>
+			<th>Email Address</th>
+			<td>
+				<input type="text" @bind="emailPrefix" class="form-control" placeholder="Email Address" /> 
+			</td>
+			<td>@@</td>
+			<td>
+				<select @bind="selectedDomain" class="form-control domain-selector">
+					<option disabled selected>Select</option>
+					<option value="gmail.com">gmail.com</option>
+					<option value="yahoo.com">yahoo.com</option>
+					<option value="sait.ca">sait.ca</option>
+					<option value="">Custom</option>
+				</select>
+				@if (selectedDomain == "")
+				{
+					<span class="separator">.</span>
+					<input type="text" @bind="customDomain" class="form-control" placeholder="Custom Domain" />
+				}
+			</td>
+			
+		</tr>
+		<tr>
+			<th>Address</th>
+			<td>
+				<input type="text" @bind="street" class="form-control" placeholder="Street" />
+			</td>
+			<td>
+				<input type="text" @bind="city" class="form-control" placeholder="City" />
+			</td>
+			<td>
+				<select @bind="province" class="form-control">
+					<option disabled selected>Select Province</option>
+					<option value="AB">Alberta</option>
+					<option value="BC">British Columbia</option>
+					<option value="MB">Manitoba</option>
+					<option value="NB">New Brunswick</option>
+					<option value="NL">Newfoundland and Labrador</option>
+					<option value="NS">Nova Scotia</option>
+					<option value="NT">Northwest Territories</option>
+					<option value="NU">Nunavut</option>
+					<option value="ON">Ontario</option>
+					<option value="PE">Prince Edward Island</option>
+					<option value="QC">Quebec</option>
+					<option value="SK">Saskatchewan</option>
+					<option value="YT">Yukon</option>
+				</select>
+
+			</td>
+		</tr>
+		<tr>
+			<th></th>
+			<td colspan="3">
+				<button type="submit" class="btn btn-primary btn-success" @onclick="AddMemberInfo">Add</button>
+				<button type="button" class="btn btn-primary btn-info" @onclick="BackToMainAdmin">Back</button>
+				<button type="button" class="btn btn-warning " @onclick="Clear">Clear</button></td>
+		</tr>
+
+	</tbody>
+</table>
+
+
+
+@code {
+	private string login_m;
+	private string password;
+	private string confirmPassword;
+	const int MIN_PASSWORD_LENGTH = 8;
+	private string firstname;
+	private string lastname;
+	private string phonePart1;
+	private string phonePart2;
+	private string phonePart3;
+	private string emailPrefix = "";
+	private string selectedDomain = "gmail.com";
+	private string customDomain = "";
+	private string street;
+	private string city;
+	private string province;
+	private bool verifiedID = false;
+	private bool verifiedPassword = false;
+
+	public Member member;
+
+	public async void CheckID()
+	{
+		if (string.IsNullOrWhiteSpace(login_m))
+		{
+			await App.Current.MainPage.DisplayAlert("NO ID", "Enter ID, please", "OK");
+		}
+		else if (await DBManager.IsIdDuplicated(login_m))
+		{
+			await App.Current.MainPage.DisplayAlert("Duplicate ID", "The entered ID is already in use.", "OK");
+		}
+		else
+		{
+			await App.Current.MainPage.DisplayAlert("You can use this id", "Do you want to use this id?", "OK");
+			verifiedID = true;
+		}
+	}
+
+	public async void CheckPasswords()
+	{
+		if (string.IsNullOrWhiteSpace(password) || string.IsNullOrWhiteSpace(confirmPassword))
+		{
+			await App.Current.MainPage.DisplayAlert("Empty Password", "Please fill in both password fields.", "OK");
+		}
+		else if (password.Length < MIN_PASSWORD_LENGTH)
+		{
+			await App.Current.MainPage.DisplayAlert("Short Password", $"Password should be at least {MIN_PASSWORD_LENGTH} characters long.", "OK");
+		}
+		else if (password != confirmPassword)
+		{
+			await App.Current.MainPage.DisplayAlert("Password Mismatch", "Passwords do not match.", "OK");
+		}
+		else
+		{
+			await App.Current.MainPage.DisplayAlert("You can use this password", "Do you want to use this password?", "OK");
+			verifiedPassword = true;
+		}
+	}
+
+	private bool IsPhoneNumberValid()
+	{
+		return !string.IsNullOrEmpty(phonePart1) && phonePart1.Length == 3 &&
+						!string.IsNullOrEmpty(phonePart2) && phonePart2.Length == 3 &&
+						!string.IsNullOrEmpty(phonePart3) && phonePart3.Length == 4 &&
+						int.TryParse(phonePart1, out _) && int.TryParse(phonePart2, out _) && int.TryParse(phonePart3, out _);
+	}
+
+	private bool IsEmailAddressValid()
+	{
+		bool isValidDomain = selectedDomain == "gmail.com" || selectedDomain == "yahoo.com" || selectedDomain == "sait.ca";
+		bool isValidCustomDomain = !string.IsNullOrEmpty(customDomain);
+
+		return !string.IsNullOrEmpty(emailPrefix) &&
+						(isValidDomain || isValidCustomDomain);
+	}
+
+
+	public string FormattedPhoneNumber => $"{phonePart1}{phonePart2}{phonePart3}";
+
+	public string FormattedEmailAddress => IsEmailAddressValid() ? $"{emailPrefix}@{customDomain}" : $"{emailPrefix}@{selectedDomain}";
+
+	public async void AddMemberInfo()
+	{
+		if (!verifiedID) { await App.Current.MainPage.DisplayAlert("Check your ID", "Click the check button", "OK"); }
+		else if (!verifiedPassword) { await App.Current.MainPage.DisplayAlert("Check your Password", "Click the check button", "OK"); }
+		else if (string.IsNullOrEmpty(firstname)) { await App.Current.MainPage.DisplayAlert("Enter your first name", "requried", "OK"); }
+		else if (string.IsNullOrEmpty(lastname)) { await App.Current.MainPage.DisplayAlert("Enter your last name", "requried", "OK"); }
+		else if (!IsPhoneNumberValid()) { await App.Current.MainPage.DisplayAlert("You can put only numbers like 123 123 1234", "requried", "OK"); }
+		else if (!IsEmailAddressValid()) { await App.Current.MainPage.DisplayAlert("Enter your email address", "requried", "OK"); }
+		else if (string.IsNullOrEmpty(street) && string.IsNullOrEmpty(city) && string.IsNullOrEmpty(province))
+		{ await App.Current.MainPage.DisplayAlert("Enter your address", "requried", "OK"); }
+
+		if (verifiedID && verifiedPassword &&
+			!string.IsNullOrEmpty(firstname) &&
+			!string.IsNullOrEmpty(lastname) &&
+			IsPhoneNumberValid() &&
+			IsEmailAddressValid() &&
+			!string.IsNullOrEmpty(street) &&
+			!string.IsNullOrEmpty(city) &&
+			!string.IsNullOrEmpty(province))
+			{
+				var member = new Member
+					{
+						Login_m = login_m,
+						Password_m = password,
+						Fname_m = firstname,
+						Lname_m = lastname,
+						Phone_m = FormattedPhoneNumber,
+						Email_m = FormattedEmailAddress,
+						Street_m = street,
+						City_m = city,
+						Province_m = province
+					};
+
+				bool success = await DBManager.AddMember(member);
+
+				if (success)
+				{
+					// Member added successfully, show a success message
+					await App.Current.MainPage.DisplayAlert("Success", "Member information added.", "OK");
+				}
+				else
+				{
+					// Failed to add member info, show an error message
+					await App.Current.MainPage.DisplayAlert("Error", "Failed to add member information.", "OK");
+				}
+
+		}
+		else
+		{
+			// Show a message indicating that all required fields must be filled
+			await App.Current.MainPage.DisplayAlert("Error", "Please fill all required fields correctly.", "OK");
+		}
+	}
+
+	public void Clear()
+	{
+		login_m = "";
+		password = "";
+		confirmPassword = "";
+		firstname = "";
+		lastname = "";
+		phonePart1 = "";
+		phonePart2 = "";
+		phonePart3 = "";
+		emailPrefix = "";
+		customDomain = "";
+		street = "";
+		city = "";
+		province = "";
+	}
+	public void BackToMainAdmin()
+	{
+		navigationManager.NavigateTo("mainAdmin");
+	}
+
+}

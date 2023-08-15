@@ -1,0 +1,74 @@
+﻿@page "/findMember"
+
+@using Database
+@using ORM
+
+<h1>Find Member</h1>
+
+<div class="col-md-3">
+    <label for="inputid" class="form-label">ID :</label>
+    <input type="text" class="form-control" placeholder="Member ID" id="inputid" @bind="inputID">
+    <button class="btn btn-primary" @onclick="ShwoOneMember">Click</button>
+</div>
+
+
+
+@if (member != null)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Login ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Street</th>
+                <th>City</th>
+                <th>Province</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>@member.Id_member</td>
+                <td>@member.Login_m</td>
+                <td>@member.Fname_m</td>
+                <td>@member.Lname_m</td>
+                <td>@member.Phone_m</td>
+                <td>@member.Email_m</td>
+                <td>@member.Street_m</td>
+                <td>@member.City_m</td>
+                <td>@member.Province_m</td>
+            </tr>
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No member to display. </p>
+}
+
+
+
+
+
+@code {
+    private int currentCount = 0;
+    private Member member;
+    private string inputID;
+
+    private async Task ShwoOneMember()
+    {
+        bool connect = await DBManager.Connect();
+        if (connect)
+        {
+            member = (Member)DBManager.GetOneMember(inputID);
+        }
+        else
+        {
+            
+        }
+
+    }
+}

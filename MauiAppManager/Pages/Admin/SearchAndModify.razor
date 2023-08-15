@@ -1,0 +1,184 @@
+﻿@page "/searchAndModify"
+
+@using System.Data
+@using Database
+@using ORM
+@using MauiAppManager.Data
+@inject NavigationManager navigationManager
+
+<h3>Search And Modify</h3>
+
+<table class="table table-striped">
+	<tbody>
+		<tr>
+			<th>Search By</th>
+			<td>
+				<select class="form-control" @bind="selectedSearchOption">
+					<option value="Author">Author</option>
+					<option value="Title">Title</option>
+					<option value="Category">Category</option>
+				</select>
+			</td>
+			<td colspan="4"><input type="text" class="form-control" @bind="inputText" placeholder="" /></td>
+			<td><button type="button" class="btn btn-primary btn-info" @onclick="SearchBooks" disabled="@string.IsNullOrWhiteSpace(inputText)">Search</button></td>
+			<td><button type="button" class="btn btn-primary btn-info" @onclick="BackToMainAdmin">Back</button></td>
+		
+		</tr>
+	</tbody>
+</table>
+
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th colspan="4">Title</th>
+			<th>Author</th>
+			<th>Category</th>
+			<th>Qty</th>
+			<th>Select</th>
+
+		</tr>
+		
+	</thead>
+	<tbody>
+		@foreach (var bookGroup in searchResults.GroupBy(result => result.Title))
+		{
+			<tr>
+				<td colspan="4">@bookGroup.Key</td>
+
+				<td>
+					@if (bookGroup.First().IsEditing)
+					{
+						<select class="form-control" @bind="name_author">
+							<option disabled selected>Select</option>
+							@foreach (var author in authors)
+							{
+								<option value="@author.Id_author">@($"{author.Fname_a} {author.Lname_a}")</option>
+							}
+						</select>
+					}
+					else
+					{
+						@string.Join(", ", bookGroup.Select(book => book.CombinedAuthors))
+					}		
+								
+				</td>
+				
+				<td>
+					@if (bookGroup.First().IsEditing)
+					{
+						<select class="form-control" @bind="bookGroup.First().EditedCategory">
+							@foreach (var category in categories)
+							{
+								<option value="@category.Name_category">@category.Name_category</option>
+							}
+						</select>
+					}
+					else
+					{
+						@bookGroup.First().Category
+					}
+				</td>
+				<td>
+					@if (bookGroup.First().IsEditing)
+					{
+						<input type="number" class="form-control" @bind="bookGroup.First().EditedQuantity" />
+					}
+					else
+					{
+						@bookGroup.First().Quantity
+					}
+				</td>
+				<td>
+					@if (bookGroup.First().IsEditing)
+					{
+						<button type="button" class="btn btn-primary btn-info" @onclick="() => ApplyChanges(bookGroup.First())">Save</button>
+					}
+					else
+					{
+						<button type="button" class="btn btn-primary btn-info" @onclick="() => StartEditing(bookGroup.First())">Edit</button>
+						<button type="button" class="btn btn-primary btn-info" @onclick="()=>Delete(bookGroup.First())">Delete</button>
+					}
+				</td>
+				
+			</tr>
+		}
+
+	</tbody>
+</table>
+
+@code {
+
+	private string selectedSearchOption = "Title";
+	private string inputText;
+
+	private string name_author;
+	private int authorId;
+
+	public List<SearchResultBook> searchResults = new List<SearchResultBook>();
+	private List<Category> categories;
+	private List<Author> authors;
+
+	public async void SearchBooks()
+	{
+		if (!string.IsNullOrEmpty(selectedSearchOption) && !string.IsNullOrEmpty(inputText))
+		{
+			searchResults = await DBManager.SearchBooksBy(selectedSearchOption, inputText);
+			StateHasChanged();
+		}
+
+	}
+
+	protected override async Task OnInitializedAsync()
+	{
+
+		//publishers = await DBManager.GetPublishers();
+		categories = await DBManager.GetCategories();
+		authors = await DBManager.GetAuthors();
+
+		StateHasChanged();
+	}
+
+	private async Task StartEditing(SearchResultBook book)
+	{
+		book.IsEditing = true;
+		book.EditedCategory = book.Category;
+		book.EditedQuantity = book.Quantity;
+		book.Editedtitle = book.Title;
+
+
+	}
+
+	public async Task ApplyChanges(SearchResultBook book)
+	{
+		book.Category = book.EditedCategory;
+		book.Quantity = book.EditedQuantity;
+		book.Id_author = book.EditedAuthor;
+		authorId = Convert.ToInt32(name_author);
+		book.IsEditing = false;
+
+		await DBManager.UpdateBookCategory(book.Id_book, book.Category);
+		await DBManager.UpdateBookQuantity(book.Id_book, book.Quantity);
+		await DBManager.UpdateBookAuthor(book.Id_book, authorId);
+		
+		StateHasChanged();
+	}
+
+	public void BackToMainAdmin()
+	{
+		navigationManager.NavigateTo("mainAdmin");
+	}
+
+	public async void Delete(SearchResultBook book)
+	{
+		bool isDeleted = await DBManager.DeleteBook(book.Id_book);
+		if (isDeleted)
+		{
+			await App.Current.MainPage.DisplayAlert("Sucess", "Deleted", "OK");
+		}
+		else
+		{
+			await App.Current.MainPage.DisplayAlert("Sorry", "Can't be deleted because it is reserved or loaned", "OK");
+		}
+	}
+
+}

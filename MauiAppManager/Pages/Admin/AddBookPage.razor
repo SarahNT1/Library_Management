@@ -1,0 +1,234 @@
+﻿@page "/addBookPage"
+
+@using System.Data
+@using Database
+@using ORM
+@inject NavigationManager navigationManager
+
+<h3>Add New Book </h3>
+
+<table class="table table-striped">
+	<tbody>
+		<tr>
+			<th>Publisher</th>
+			<td colspan="3">
+				@if (publishers != null)
+				{
+					<select class="form-control" @bind="name_p">
+						<option disabled selected>Select</option>
+						@foreach (var publisher in publishers)
+						{
+							<option value="@publisher.Id_publisher">@publisher.Name_p</option>
+						}
+					</select>
+				}
+				else
+				{
+					<p>Loading publishers....</p>
+				}
+
+			</td>
+		</tr>
+		<tr>
+			<th>Published Date</th>
+			<td>
+				<select class="form-control" @bind="selectedYear">
+					<option disabled selected>Year</option>
+					@for (int year = DateTime.Now.Year - 50; year <= DateTime.Now.Year; year++)
+					{
+						<option value="@year">@year</option>
+					}
+				</select>
+			</td>
+			<td>
+				<select class="form-control" @bind="selectedMonth">
+					<option disabled selected>Month</option>
+					@for (int month = 1; month <= 12; month++)
+					{
+						<option value="@month">@month</option>
+					}
+				</select>
+			</td>
+			<td>
+				<select class="form-control" @bind="selectedDay">
+					<option disabled selected>Day</option>
+					@for (int day = 1; day <= DateTime.DaysInMonth(selectedYear, selectedMonth); day++)
+					{
+						<option value="@day">@day</option>
+					}
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<th>Category</th>
+			<td colspan="3">
+				@if(categories != null)
+				{
+					<select class="form-control" @bind="name_category">
+						<option disabled selected>Select</option>
+						@foreach (var category in categories)
+						{
+							<option value="@category.Id_category">@category.Name_category</option>
+						}
+					</select>
+				}else{
+					<p>Loading categories....</p>
+				}
+				
+			</td>
+		</tr>
+		<tr>
+			<th>Autor</th>
+			<td colspan="3">
+				@if (authors != null)
+				{
+					<select class="form-control" @bind="name_author">
+						<option disabled selected>Select</option>
+						@foreach (var author in authors)
+						{
+							<option value="@author.Id_author">@($"{author.Fname_a} {author.Lname_a}")</option>
+						}
+					</select>
+				}
+				else
+				{
+					<p>Loading authors....</p>
+				}
+								
+			</td>
+		</tr>
+		<tr>
+			<th>Book Title</th>
+			<td colspan="3">
+				<input type="text" @bind="title" class="form-control" placeholder="Book Title" />
+			</td>
+		</tr>
+		<tr>
+			<th>ISBN</th>
+			<td colspan="3">
+				<input type="text" @bind="isbn" class="form-control" placeholder="ISBN" maxlength="13"/>
+			</td>
+		</tr>
+		<tr>
+			<th>Quantity</th>
+			<td colspan="3">
+				<input type="text" @bind="quantity" class="form-control" placeholder="Quantity" />
+			</td>
+		</tr>
+		<tr>
+			<th></th>
+			
+		</tr>
+				
+	</tbody>
+</table>
+
+<div class="col-md-6">
+	<button type="submit" class="btn btn-primary btn-success" @onclick="AddBookInfo">Add Book</button>
+	<button type="button" class="btn btn-warning " @onclick="Clear">Clear</button>
+	<button type="button" class="btn btn-primary btn-info" @onclick="BackToMainAdmin">Back to Menu</button>
+	<button type="button" class="btn btn-primary" @onclick="LogOut">Log out</button>
+	<p></p>
+</div>
+
+
+@code {
+
+
+	private int selectedYear = DateTime.Now.Year;
+	private int selectedMonth = DateTime.Now.Month;
+	private int selectedDay = DateTime.Now.Day;
+
+	private string title;
+	private string isbn;
+	private int quantity;
+
+	private string name_p;
+	private int publisherId;
+
+	private string name_category;
+	private int categoryId;
+
+	private string name_author;
+	private int authorId;
+
+
+	private DateTime selectedDate;
+
+	private List<Category> categories;
+	private List<Publisher> publishers;
+	private List<Author> authors;
+
+	protected override async Task OnInitializedAsync()
+	{
+
+		publishers = await DBManager.GetPublishers();
+		categories = await DBManager.GetCategories();
+		authors = await DBManager.GetAuthors();
+
+		StateHasChanged();
+	}
+
+	public async void AddBookInfo()
+	{
+		var book = new Book();
+		var book_author = new Book_Author();
+		if(name_p != null)
+		{
+			publisherId = Convert.ToInt32(name_p);
+		}
+		if (name_category != null)
+		{
+			categoryId = Convert.ToInt32(name_category);
+		}
+
+		book.Id_publisher = publisherId;
+		book.Id_category = categoryId;
+		book.Isbn = isbn;
+		book.Title = title;
+		book.PublishDate = new DateTime(selectedYear, selectedMonth, selectedDay);
+		book.Quantity = quantity;
+
+		bool insertBookAuthor = false;
+
+		int insertedId = await DBManager.InsertBook(book);
+		if (insertedId != -1)
+		{
+			if(name_author != null)
+			{
+				authorId = Convert.ToInt32(name_author);
+				book_author.Id_author = authorId;
+				book_author.Id_book = insertedId;
+				insertBookAuthor = await DBManager.InsertBookAuthor(book_author);
+				
+				await App.Current.MainPage.DisplayAlert("Success", "Added to the database", "OK");
+
+			}
+		}
+		else
+		{
+			await App.Current.MainPage.DisplayAlert("Fail", "Error", "OK");
+		}
+		
+	}
+
+	public void Clear()
+	{
+		name_p = "";
+		name_category = "";
+		name_author = "";
+		title = "";
+		isbn = "";
+		quantity = 0;
+	}
+
+	public void BackToMainAdmin()
+	{
+		navigationManager.NavigateTo("mainAdmin");
+	}
+
+	public async void LogOut()
+	{
+		navigationManager.NavigateTo("/");
+	}
+}
