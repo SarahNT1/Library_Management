@@ -4,6 +4,7 @@
 @using Database
 @using ORM
 @using MauiAppManager.Data
+@using MySqlConnector
 @inject NavigationManager navigationManager
 
 <h3>Loan</h3>
@@ -27,7 +28,7 @@
             </td>
             <td>
                 <button class="btn btn-primary btn-info" @onclick="CancelLoan">Back</button>
-                <button class="btn btn-primary btn-info" @onclick="LoanBook" disabled="@string.IsNullOrWhiteSpace(memberIdInput)">Confirm</button>
+                <button class="btn btn-primary btn-info" @onclick="LoanBook">Confirm</button>
             </td>
         </tr>
     </tbody>
@@ -45,25 +46,32 @@
 
     public async void LoanBook()
     {
-        bool isAvailable = await DBManager.CheckAvailability(books.Id_book);
-
-        if(isAvailable)
+        try
         {
-            bool success = await DBManager.AddReserved(memberIdInput, books.Id_book);
-            successful = await DBManager.AddLoan(memberIdInput, books.Id_book);
+            bool isAvailable = await DBManager.CheckAvailability(books.Id_book);
 
-            if (successful)
+            if(isAvailable)
             {
-                await App.Current.MainPage.DisplayAlert("Sucess", "Book Loaned", "OK");
+                bool success = await DBManager.AddReserved(memberIdInput, books.Id_book);
+                successful = await DBManager.AddLoan(memberIdInput, books.Id_book);
+
+                if (successful)
+                {
+                    await App.Current.MainPage.DisplayAlert("Sucess", "Book Loaned", "OK");
+                }
+                else
+                {
+                    await App.Current.MainPage.DisplayAlert("Error", "Loan unsuccessful or an error occurred.", "OK");
+                }
             }
             else
             {
-                await App.Current.MainPage.DisplayAlert("Error", "Loan unsuccessful or an error occurred.", "OK");
+                await App.Current.MainPage.DisplayAlert("Error", "This book is unavailable or an error occurred.", "OK");
             }
         }
-        else
+        catch(MySqlException ex)
         {
-            await App.Current.MainPage.DisplayAlert("Error", "This book is unavailable or an error occurred.", "OK");
+            await App.Current.MainPage.Display("Error", "Check input fields: " + ex.Message, "OK");
         }
     }
 }
