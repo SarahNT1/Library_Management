@@ -1,4 +1,4 @@
-﻿namespace ORM
+namespace ORM
 {
     public class Member
     {
@@ -33,4 +33,3 @@
 
 
     }
-}

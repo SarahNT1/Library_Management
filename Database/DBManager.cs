@@ -1,4 +1,4 @@
-﻿using MySqlConnector;
+using MySqlConnector;
 using System;
 using System.Diagnostics.Metrics;
 using System.Data;
@@ -784,5 +784,29 @@ namespace Database
 
 		        return success;
 	    }
+    public static async Task UpdateMember(string newPhone, string newEmail, string newStreet, string newCity, string newProv, int id_m)
+		{
+			bool connected = await Connect();
+			if (connected)
+			{
+				string sql = "update member set phone_m = @newPhone, email_m = @newEmail, street_m = @newStreet, city_m = @newCity, province_m = @newProv where id_member = @user;";
+				using (MySqlCommand command = new MySqlCommand(sql, connection))
+				{
+					command.Parameters.AddWithValue("@newPhone", newPhone);
+					command.Parameters.AddWithValue("@newEmail", newEmail);
+					command.Parameters.AddWithValue("@newStreet", newStreet);
+					command.Parameters.AddWithValue("@newCity", newCity);
+					command.Parameters.AddWithValue("@newProv", newProv);
+					command.Parameters.AddWithValue("@user", id_m);
+					command.ExecuteNonQuery();
+
+
+					Disconnect();
+
+				}
+			}
+			
+		}
 	}
 }
+

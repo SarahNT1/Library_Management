@@ -1,0 +1,30 @@
+C:\Users\jiyeo\OneDrive\Desktop\CPRG211_B\Final Project\LibraryManagement\LibraryManagement\Database\bin\Debug\net6.0\Database.deps.json
+C:\Users\jiyeo\OneDrive\Desktop\CPRG211_B\Final Project\LibraryManagement\LibraryManagement\Database\bin\Debug\net6.0\Database.dll
+C:\Users\jiyeo\OneDrive\Desktop\CPRG211_B\Final Project\LibraryManagement\LibraryManagement\Database\bin\Debug\net6.0\Database.pdb
+C:\Users\jiyeo\OneDrive\Desktop\CPRG211_B\Final Project\LibraryManagement\LibraryManagement\Database\bin\Debug\net6.0\ORM.dll
+C:\Users\jiyeo\OneDrive\Desktop\CPRG211_B\Final Project\LibraryManagement\LibraryManagement\Database\bin\Debug\net6.0\ORM.pdb
+C:\Users\jiyeo\OneDrive\Desktop\CPRG211_B\Final Project\LibraryManagement\LibraryManagement\Database\obj\Debug\net6.0\Database.csproj.AssemblyReference.cache
+C:\Users\jiyeo\OneDrive\Desktop\CPRG211_B\Final Project\LibraryManagement\LibraryManagement\Database\obj\Debug\net6.0\Database.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\jiyeo\OneDrive\Desktop\CPRG211_B\Final Project\LibraryManagement\LibraryManagement\Database\obj\Debug\net6.0\Database.AssemblyInfoInputs.cache
+C:\Users\jiyeo\OneDrive\Desktop\CPRG211_B\Final Project\LibraryManagement\LibraryManagement\Database\obj\Debug\net6.0\Database.AssemblyInfo.cs
+C:\Users\jiyeo\OneDrive\Desktop\CPRG211_B\Final Project\LibraryManagement\LibraryManagement\Database\obj\Debug\net6.0\Database.csproj.CoreCompileInputs.cache
+C:\Users\jiyeo\OneDrive\Desktop\CPRG211_B\Final Project\LibraryManagement\LibraryManagement\Database\obj\Debug\net6.0\Database.csproj.CopyComplete
+C:\Users\jiyeo\OneDrive\Desktop\CPRG211_B\Final Project\LibraryManagement\LibraryManagement\Database\obj\Debug\net6.0\Database.dll
+C:\Users\jiyeo\OneDrive\Desktop\CPRG211_B\Final Project\LibraryManagement\LibraryManagement\Database\obj\Debug\net6.0\refint\Database.dll
+C:\Users\jiyeo\OneDrive\Desktop\CPRG211_B\Final Project\LibraryManagement\LibraryManagement\Database\obj\Debug\net6.0\Database.pdb
+C:\Users\jiyeo\OneDrive\Desktop\CPRG211_B\Final Project\LibraryManagement\LibraryManagement\Database\obj\Debug\net6.0\ref\Database.dll
+C:\Users\tzechichan\Downloads\LibraryManagement(jiyeonv2)\LibraryManagement\LibraryManagement\Database\bin\Debug\net6.0\Database.deps.json
+C:\Users\tzechichan\Downloads\LibraryManagement(jiyeonv2)\LibraryManagement\LibraryManagement\Database\bin\Debug\net6.0\Database.dll
+C:\Users\tzechichan\Downloads\LibraryManagement(jiyeonv2)\LibraryManagement\LibraryManagement\Database\bin\Debug\net6.0\Database.pdb
+C:\Users\tzechichan\Downloads\LibraryManagement(jiyeonv2)\LibraryManagement\LibraryManagement\Database\bin\Debug\net6.0\ORM.dll
+C:\Users\tzechichan\Downloads\LibraryManagement(jiyeonv2)\LibraryManagement\LibraryManagement\Database\bin\Debug\net6.0\ORM.pdb
+C:\Users\tzechichan\Downloads\LibraryManagement(jiyeonv2)\LibraryManagement\LibraryManagement\Database\obj\Debug\net6.0\Database.csproj.AssemblyReference.cache
+C:\Users\tzechichan\Downloads\LibraryManagement(jiyeonv2)\LibraryManagement\LibraryManagement\Database\obj\Debug\net6.0\Database.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\tzechichan\Downloads\LibraryManagement(jiyeonv2)\LibraryManagement\LibraryManagement\Database\obj\Debug\net6.0\Database.AssemblyInfoInputs.cache
+C:\Users\tzechichan\Downloads\LibraryManagement(jiyeonv2)\LibraryManagement\LibraryManagement\Database\obj\Debug\net6.0\Database.AssemblyInfo.cs
+C:\Users\tzechichan\Downloads\LibraryManagement(jiyeonv2)\LibraryManagement\LibraryManagement\Database\obj\Debug\net6.0\Database.csproj.CoreCompileInputs.cache
+C:\Users\tzechichan\Downloads\LibraryManagement(jiyeonv2)\LibraryManagement\LibraryManagement\Database\obj\Debug\net6.0\Database.csproj.CopyComplete
+C:\Users\tzechichan\Downloads\LibraryManagement(jiyeonv2)\LibraryManagement\LibraryManagement\Database\obj\Debug\net6.0\Database.dll
+C:\Users\tzechichan\Downloads\LibraryManagement(jiyeonv2)\LibraryManagement\LibraryManagement\Database\obj\Debug\net6.0\refint\Database.dll
+C:\Users\tzechichan\Downloads\LibraryManagement(jiyeonv2)\LibraryManagement\LibraryManagement\Database\obj\Debug\net6.0\Database.pdb
+C:\Users\tzechichan\Downloads\LibraryManagement(jiyeonv2)\LibraryManagement\LibraryManagement\Database\obj\Debug\net6.0\ref\Database.dll
