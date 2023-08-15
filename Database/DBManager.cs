@@ -784,7 +784,7 @@ namespace Database
 
 		        return success;
 	    }
-    public static async Task UpdateMember(string newPhone, string newEmail, string newStreet, string newCity, string newProv, int id_m)
+    		public static async Task UpdateMember(string newPhone, string newEmail, string newStreet, string newCity, string newProv, int id_m)
 		{
 			bool connected = await Connect();
 			if (connected)
@@ -806,6 +806,21 @@ namespace Database
 				}
 			}
 			
+		}
+		public static async Task DeleteMember(int id_m)
+		{
+			bool connected = await Connect();
+			if (connected)
+			{
+				string sql = "delete from member where id_member = @user;";
+				using (MySqlCommand command = new MySqlCommand(sql, connection))
+				{
+					command.Parameters.AddWithValue("@user", id_m);
+					command.ExecuteNonQuery();
+					Disconnect();
+
+				}
+			}
 		}
 	}
 }
