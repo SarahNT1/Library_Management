@@ -68,23 +68,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\tzechichan\\.nuget\\packages\\": {},
+    "C:\\Users\\SNPOR\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\tzechichan\\Downloads\\LibraryManagement(version3)\\LibraryManagement\\LibraryManagement\\Database\\Database.csproj",
+      "projectUniqueName": "C:\\Visual Studio - MAUI\\SAIT_Library_Official\\LibraryManagement\\Library_Management\\Database\\Database.csproj",
       "projectName": "Database",
-      "projectPath": "C:\\Users\\tzechichan\\Downloads\\LibraryManagement(version3)\\LibraryManagement\\LibraryManagement\\Database\\Database.csproj",
-      "packagesPath": "C:\\Users\\tzechichan\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\tzechichan\\Downloads\\LibraryManagement(version3)\\LibraryManagement\\LibraryManagement\\Database\\obj\\",
+      "projectPath": "C:\\Visual Studio - MAUI\\SAIT_Library_Official\\LibraryManagement\\Library_Management\\Database\\Database.csproj",
+      "packagesPath": "C:\\Users\\SNPOR\\.nuget\\packages\\",
+      "outputPath": "C:\\Visual Studio - MAUI\\SAIT_Library_Official\\LibraryManagement\\Library_Management\\Database\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\tzechichan\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\SNPOR\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -100,8 +100,8 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "C:\\Users\\tzechichan\\Downloads\\LibraryManagement(version3)\\LibraryManagement\\LibraryManagement\\ORM\\ORM.csproj": {
-              "projectPath": "C:\\Users\\tzechichan\\Downloads\\LibraryManagement(version3)\\LibraryManagement\\LibraryManagement\\ORM\\ORM.csproj"
+            "C:\\Visual Studio - MAUI\\SAIT_Library_Official\\LibraryManagement\\Library_Management\\ORM\\ORM.csproj": {
+              "projectPath": "C:\\Visual Studio - MAUI\\SAIT_Library_Official\\LibraryManagement\\Library_Management\\ORM\\ORM.csproj"
             }
           }
         }
@@ -137,7 +137,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.304\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
       }
     }
   }

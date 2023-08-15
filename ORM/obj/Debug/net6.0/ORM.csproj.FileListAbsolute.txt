@@ -22,3 +22,15 @@ C:\Users\tzechichan\Downloads\LibraryManagement(jiyeonv2)\LibraryManagement\Libr
 C:\Users\tzechichan\Downloads\LibraryManagement(jiyeonv2)\LibraryManagement\LibraryManagement\ORM\obj\Debug\net6.0\refint\ORM.dll
 C:\Users\tzechichan\Downloads\LibraryManagement(jiyeonv2)\LibraryManagement\LibraryManagement\ORM\obj\Debug\net6.0\ORM.pdb
 C:\Users\tzechichan\Downloads\LibraryManagement(jiyeonv2)\LibraryManagement\LibraryManagement\ORM\obj\Debug\net6.0\ref\ORM.dll
+C:\Visual Studio - MAUI\SAIT_Library_Official\LibraryManagement\Library_Management\ORM\bin\Debug\net6.0\ORM.deps.json
+C:\Visual Studio - MAUI\SAIT_Library_Official\LibraryManagement\Library_Management\ORM\bin\Debug\net6.0\ORM.dll
+C:\Visual Studio - MAUI\SAIT_Library_Official\LibraryManagement\Library_Management\ORM\bin\Debug\net6.0\ORM.pdb
+C:\Visual Studio - MAUI\SAIT_Library_Official\LibraryManagement\Library_Management\ORM\obj\Debug\net6.0\ORM.csproj.AssemblyReference.cache
+C:\Visual Studio - MAUI\SAIT_Library_Official\LibraryManagement\Library_Management\ORM\obj\Debug\net6.0\ORM.GeneratedMSBuildEditorConfig.editorconfig
+C:\Visual Studio - MAUI\SAIT_Library_Official\LibraryManagement\Library_Management\ORM\obj\Debug\net6.0\ORM.AssemblyInfoInputs.cache
+C:\Visual Studio - MAUI\SAIT_Library_Official\LibraryManagement\Library_Management\ORM\obj\Debug\net6.0\ORM.AssemblyInfo.cs
+C:\Visual Studio - MAUI\SAIT_Library_Official\LibraryManagement\Library_Management\ORM\obj\Debug\net6.0\ORM.csproj.CoreCompileInputs.cache
+C:\Visual Studio - MAUI\SAIT_Library_Official\LibraryManagement\Library_Management\ORM\obj\Debug\net6.0\ORM.dll
+C:\Visual Studio - MAUI\SAIT_Library_Official\LibraryManagement\Library_Management\ORM\obj\Debug\net6.0\refint\ORM.dll
+C:\Visual Studio - MAUI\SAIT_Library_Official\LibraryManagement\Library_Management\ORM\obj\Debug\net6.0\ORM.pdb
+C:\Visual Studio - MAUI\SAIT_Library_Official\LibraryManagement\Library_Management\ORM\obj\Debug\net6.0\ref\ORM.dll

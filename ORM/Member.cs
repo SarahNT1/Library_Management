@@ -1,7 +1,8 @@
 namespace ORM
 {
-    public class Member
+    public class Member : User
     {
+        /*
         public int Id_member { get; set; }
         public string Login_m { get; set; }
         public string Password_m { get; set; }
@@ -12,6 +13,7 @@ namespace ORM
         public string Street_m { get; set; }
         public string City_m { get; set; }
         public string Province_m { get; set; }
+        */
 
         public Member()
         {

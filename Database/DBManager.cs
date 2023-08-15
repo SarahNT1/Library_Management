@@ -617,6 +617,12 @@ namespace Database
 
 		}
 
+		/*<summary>
+		 * This method is to check if the book that
+		 * the user wants to loan is available or not.
+		 * It is ran before the method that updates
+		 * the database.
+		 </summary>*/
 		public static async Task<bool> CheckAvailability(int bookId)
 		{
 			try
@@ -652,6 +658,11 @@ namespace Database
 			}
         	}
 
+		/*<summary>
+		 * This method adds a row in the book_reserved
+		 * table to keep track of the books that have
+		 * been reserved/loaned by the members.
+		 </summary>*/
 		public static async Task<bool> AddReserved(string memberId, int bookId)
 		{
 			try
@@ -683,6 +694,11 @@ namespace Database
 			}
         	}
 
+		/*<summary>
+		 * This, after the method above, adds a row
+		 * to the loan database to show when the user
+		 * loaned the book.
+		 </summary>*/
 		public static async Task<bool> AddLoan(string memberId, int bookId)
 		{
             		bool connected = await Connect();
@@ -710,6 +726,10 @@ namespace Database
             		return success;
         	}
 
+		/*<summary>
+		 * This finds the book id using the book title 
+		 * for when the user wants to return the book.
+		 </summary>*/
 		public static async Task<int> FindBookId(string bookTitle)
 		{
 			bool connected = await Connect();
@@ -734,6 +754,12 @@ namespace Database
 			}
 		}
 
+		/*<summary>
+		 * This method then deletes the book_reserved row
+		 * for the book that was returned. It shows that the
+		 * book is currently not reserved and the user is 
+		 * currently not reserving that book.
+		 </summary>*/
         public static async Task<bool> DeleteReserved(int bookId, string memberId)
         {
 			bool connected = await Connect();
@@ -758,6 +784,10 @@ namespace Database
 			return success;
 		}
 
+		/*<summary>
+		 * This method updates the row of the book that was returned,
+		 * now saving the date that the book was returned.
+		 </summary>*/
 		public static async Task<bool> UpdateLoan(int bookId, string memberId)
 	    {
 			bool connected = await Connect();
