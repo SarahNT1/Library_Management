@@ -71,7 +71,7 @@
         }
         catch(MySqlException ex)
         {
-            await App.Current.MainPage.Display("Error", "Check input fields: " + ex.Message, "OK");
+            await App.Current.MainPage.DisplayAlert("Error", "Check input fields: " + ex.Message, "OK");
         }
     }
 }
