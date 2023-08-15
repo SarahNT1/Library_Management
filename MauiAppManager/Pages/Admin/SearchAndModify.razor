@@ -50,25 +50,6 @@
 
 				<td>@string.Join(", ", bookGroup.Select(book => book.CombinedAuthors))</td>
 
-
-				<td>
-					@if (bookGroup.First().IsEditing)
-					{
-						<select class="form-control" @bind="name_author">
-							<option disabled selected>Select</option>
-							@foreach (var author in authors)
-							{
-								<option value="@author.Id_author">@($"{author.Fname_a} {author.Lname_a}")</option>
-							}
-						</select>
-					}
-					else
-					{
-						@string.Join(", ", bookGroup.Select(book => book.CombinedAuthors))
-					}		
-								
-				</td>
-
 				
 				<td>
 					@if (bookGroup.First().IsEditing)
