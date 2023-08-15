@@ -784,7 +784,10 @@ namespace Database
 
 		        return success;
 	    }
-		// Update member information after editing. Every change in one edit will be updated together.
+		/*<summary>
+		 * Update member information after editing. 
+		 * Every change in once edit will be updated together.
+		<summary>*/
     		public static async Task UpdateMember(string newPhone, string newEmail, string newStreet, string newCity, string newProv, int id_m)
 		{
 			bool connected = await Connect();
@@ -808,7 +811,10 @@ namespace Database
 			}
 			
 		}
-		// Delect member via id_member
+		/*<summary>
+		 * The is method is for deleting member.
+		 * The member which is selected will be removed.
+		 <summay>*/
 		public static async Task DeleteMember(int id_m)
 		{
 			bool connected = await Connect();
