@@ -45,13 +45,17 @@
 		{
 			<tr>
 				<td >@member.Id_member</td>
-				<td>@member.Fname_m</td>
-				<td>@member.Lname_m</td>
+				<td>
+					@member.Fname_m
+				</td>
+				<td>
+					@member.Lname_m
+				</td>
 
 				<td>
 					@if (IsEditing)
 					{
-						<input type="text" @bind="EditedPhoneNumber" class="form-control" minlength="10" maxlength="10" />
+						<input type="text" @bind="member.Phone_m" class="form-control" minlength="10" maxlength="10" />
 					}
 					else
 					{
@@ -61,7 +65,7 @@
 				<td>
 					@if (IsEditing)
 					{
-						<input type="text" class="form-control" @bind="EditedEmail" />
+						<input type="text" class="form-control" @bind="member.Email_m" />
 					}
 					else
 					{
@@ -71,14 +75,60 @@
 				<td>
 					@if (IsEditing)
 					{
-						<button type="button" class="btn btn-primary btn-info" @onclick="() => ApplyChanges(member)">Save</button>
+						<input type="text" class="form-control" @bind="member.Street_m" />
+					}
+					else
+					{
+						@member.Street_m
+					}
+				</td>
+				<td>
+					@if (IsEditing)
+					{
+						<input type="text" class="form-control" @bind="member.City_m" />
+					}
+					else
+					{
+						@member.City_m
+					}
+				</td>
+				<td>
+					@if (IsEditing)
+					{
+						<input type="text" class="form-control" readonly @bind="member.Province_m" />
+						<select name="editMemberProv" @bind="member.Province_m">
+							<option value="AB">AB</option>
+							<option value="BC">BC</option>
+							<option value="NB">NB</option>
+							<option value="NL">NL</option>
+							<option value="NT">NT</option>
+							<option value="NS">NS</option>
+							<option value="NU">NU</option>
+							<option value="ON">ON</option>
+							<option value="PE">PE</option>
+							<option value="QC">QC</option>
+							<option value="SK">SK</option>
+							<option value="YT">YT</option>
+						</select>
+					}
+					else
+					{
+						@member.Province_m
+					}
+				</td>
+				<td>
+					@if (IsEditing)
+					{
+						<button type="button" class="btn btn-primary btn-info" @onclick="() => SaveEdit(member)">Save</button>
+						<button type="button" class="btn btn-primary btn-info" @onclick="() => CancelEdit(member)">Cancel</button>
 					}
 					else
 					{
 						<button type="button" class="btn btn-primary btn-info" @onclick="() => StartEditing(member)">Edit</button>
-						<button type="button" class="btn btn-primary btn-info" @onclick="Delete">Delete</button>
+						<button type="button" class="btn btn-primary btn-info" @onclick="() => DeleteMem(member)">Delete</button>
 					}
 				</td>
+
 
 			</tr>
 		}
@@ -141,13 +191,68 @@
 		SearchBooks(); // Refresh the search results after updating the member info
 	}
 
+	//Save Edit Member
+	public async Task SaveEdit(Member member)
+	{
+
+		bool phoneFormat = int.TryParse(member.Phone_m, out int result);
+		bool emailFormat = Regex.IsMatch(member.Email_m, @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9._]+[a-zA-Z]{2,}$") ? true : false;
+		try
+		{
+			if (member.Phone_m.Length == 10 && phoneFormat && emailFormat)
+			{
+				await DBManager.UpdateMember(member.Phone_m, member.Email_m, member.Street_m, member.City_m, member.Province_m, member.Id_member);
+				await App.Current.MainPage.DisplayAlert("Success", $"{member.Fname_m} {member.Lname_m}'s information updated successfully.", "Done");
+				IsEditing = false;
+			}
+			else if ((member.Phone_m.Length != 10 || !phoneFormat) && emailFormat) // only for phone number error
+			{
+				await App.Current.MainPage.DisplayAlert("Error", "Error: Phone number should be 10 digits.", "Done");
+			}
+			else if ((!emailFormat) && (member.Phone_m.Length != 10 || !phoneFormat)) // only for email error
+			{
+				await App.Current.MainPage.DisplayAlert("Error", "Error: Email's format error.", "Done");
+			}
+			else if ((member.Phone_m.Length != 10 || !phoneFormat) && !emailFormat)  // for both phone number and email error
+			{
+				await App.Current.MainPage.DisplayAlert("Error", "Error: Please chekc phone number and email formats.", "Done");
+			}
+			else
+			{
+				throw new Exception();
+			}
+		}
+		catch(Exception ex)
+		{
+			await App.Current.MainPage.DisplayAlert("Error", $"Error: {ex.Message}", "Done");
+		}
+	}
+	public void CancelEdit(Member member)
+	{
+		searchResults = new List<Member>();
+		inputText = null;
+		navigationManager.NavigateTo("searchAndModifyMember");
+		IsEditing = false;
+	}
+
 	public void BackToMainAdmin()
 	{
 		navigationManager.NavigateTo("mainAdmin");
 	}
 
-	public async void Delete()
+	public async Task DeleteMem(Member member)
 	{
-
+		try
+		{
+			await DBManager.DeleteMember(member.Id_member);
+			await App.Current.MainPage.DisplayAlert("Success", $"(ID: {member.Id_member}) Member: {member.Fname_m} {member.Lname_m} has been deleted.", "Done");
+			IsEditing = false;
+			searchResults = new List<Member>();
+			inputText = null;
+		}
+		catch (Exception ex)
+		{
+			await App.Current.MainPage.DisplayAlert("Error", $"This member might hasn't returned books or has reserved books.\nError: {ex.Message}", "Done");
+		}
 	}
 }
