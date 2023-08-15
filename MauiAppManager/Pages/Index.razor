@@ -69,16 +69,26 @@
 	//	navigationManager.NavigateTo("registration");
 	//}
 
+	// Log in for administrator
 	public async void AdminLogin()
 	{
-		if (id_login == "admin" && password_login == "1234")
+		bool IsConnected = DBManager.IsConnected();
+		if (id_login == "admin" && password_login == "1234") // check the log in information
 		{
-			IsAdmin = true;
-			navigationManager.NavigateTo($"/mainAdmin/");
+			if (IsConnected) // check the connection of database works properly
+			{
+				IsAdmin = true;
+				navigationManager.NavigateTo($"/mainAdmin/");
+			}
+			else
+			{
+				await App.Current.MainPage.DisplayAlert("Error", "Check the connection of database as Administrator", "OK");
+			}
+
 		}
 		else
 		{
-			await App.Current.MainPage.DisplayAlert("Error", "Check your id and password as Administrator", "OK");
+			await App.Current.MainPage.DisplayAlert("Error", "Check your id or password as Administrator", "OK");
 		}
 	}
 
