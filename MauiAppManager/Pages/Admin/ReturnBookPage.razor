@@ -4,6 +4,7 @@
 @using Database
 @using ORM
 @using MauiAppManager.Data
+@using MySqlConnector
 @inject NavigationManager navigationManager
 
 <h3>Return</h3>
@@ -46,19 +47,25 @@
 
     public async void ReturnBook()
     {
-        int bookIdReturn = await DBManager.FindBookId(returnBookTitle);
-        bool returned = await DBManager.DeleteReserved(bookIdReturn, returnMemberId);
-
-        if(returned)
+        try
         {
-            bool loanUpdated = await DBManager.UpdateLoan(bookIdReturn, returnMemberId);
+            int bookIdReturn = await DBManager.FindBookId(returnBookTitle);
+            bool returned = await DBManager.DeleteReserved(bookIdReturn, returnMemberId);
 
-            await App.Current.MainPage.DisplayAlert("Success", "This book has been returned.", "OK");
+            if(returned)
+            {
+                bool loanUpdated = await DBManager.UpdateLoan(bookIdReturn, returnMemberId);
 
+                await App.Current.MainPage.DisplayAlert("Success", "This book has been returned.", "OK");
+            }
+            else
+            {
+                await App.Current.MainPage.DisplayAlert("Unsuccessfull", "This book was not returned.", "OK");
+            }
         }
-        else
+        catch(MySqlException ex)
         {
-            await App.Current.MainPage.DisplayAlert("Unsuccessfull", "This book was not returned.", "OK");
+            await App.Current.MainPage.DisplayAlert("Error", "Check input fields: " + ex.Message, "OK");
         }
     }
 }
