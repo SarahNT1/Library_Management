@@ -199,40 +199,41 @@
 		bool emailFormat = Regex.IsMatch(member.Email_m, @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9._]+[a-zA-Z]{2,}$") ? true : false;
 		try
 		{
-			if (member.Phone_m.Length == 10 && phoneFormat && emailFormat)
+			if (member.Phone_m.Length == 10 && phoneFormat && emailFormat) // if both phone number and email formats are correct
 			{
-				await DBManager.UpdateMember(member.Phone_m, member.Email_m, member.Street_m, member.City_m, member.Province_m, member.Id_member);
+				await DBManager.UpdateMember(member.Phone_m, member.Email_m, member.Street_m, member.City_m, member.Province_m, member.Id_member); // information will be updated
 				await App.Current.MainPage.DisplayAlert("Success", $"{member.Fname_m} {member.Lname_m}'s information updated successfully.", "Done");
 				IsEditing = false;
 			}
-			else if ((member.Phone_m.Length != 10 || !phoneFormat) && emailFormat) // only for phone number error
+			else if ((member.Phone_m.Length != 10 || !phoneFormat) && emailFormat) // only for phone number format error
 			{
 				await App.Current.MainPage.DisplayAlert("Error", "Error: Phone number should be 10 digits.", "Done");
 			}
-			else if ((!emailFormat) && (member.Phone_m.Length != 10 || !phoneFormat)) // only for email error
+			else if ((!emailFormat) && (member.Phone_m.Length != 10 || !phoneFormat)) // only for email format error
 			{
 				await App.Current.MainPage.DisplayAlert("Error", "Error: Email's format error.", "Done");
 			}
 			else if ((member.Phone_m.Length != 10 || !phoneFormat) && !emailFormat)  // for both phone number and email error
 			{
-				await App.Current.MainPage.DisplayAlert("Error", "Error: Please chekc phone number and email formats.", "Done");
+				await App.Current.MainPage.DisplayAlert("Error", "Error: Please check phone number and email formats.", "Done");
 			}
 			else
 			{
 				throw new Exception();
 			}
 		}
-		catch(Exception ex)
+		catch(Exception ex) // if email are same as others, will show this error. (Because email should be unique)
 		{
 			await App.Current.MainPage.DisplayAlert("Error", $"Error: {ex.Message}", "Done");
 		}
 	}
+	// Cancel editing member, the change will not be saved.
 	public void CancelEdit(Member member)
 	{
-		searchResults = new List<Member>();
-		inputText = null;
+		searchResults = new List<Member>(); // searching result will be clear
+		inputText = null; //searching area will be clear
 		navigationManager.NavigateTo("searchAndModifyMember");
-		IsEditing = false;
+		IsEditing = false; // editing area will be invisible
 	}
 
 	public void BackToMainAdmin()
@@ -240,17 +241,18 @@
 		navigationManager.NavigateTo("mainAdmin");
 	}
 
+	// Delete member
 	public async Task DeleteMem(Member member)
 	{
 		try
 		{
-			await DBManager.DeleteMember(member.Id_member);
+			await DBManager.DeleteMember(member.Id_member); // delete the member in database
 			await App.Current.MainPage.DisplayAlert("Success", $"(ID: {member.Id_member}) Member: {member.Fname_m} {member.Lname_m} has been deleted.", "Done");
-			IsEditing = false;
+			IsEditing = false; // editing area will be invisible
 			searchResults = new List<Member>();
-			inputText = null;
+			inputText = null; //searching area will be clear
 		}
-		catch (Exception ex)
+		catch (Exception ex) // if the member hasn't returned book or they have any reserved book, administrator cannot delete this member.
 		{
 			await App.Current.MainPage.DisplayAlert("Error", $"This member might hasn't returned books or has reserved books.\nError: {ex.Message}", "Done");
 		}
