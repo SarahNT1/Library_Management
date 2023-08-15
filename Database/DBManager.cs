@@ -21,7 +21,7 @@ namespace Database
 				Server = "localhost",
 				Database = "cprg211",
 				UserID = "root",
-				Password = "0rb3n3tAngakongpassword!",
+				Password = "root",
 			};
 
 			connection = new MySqlConnection(builder.ConnectionString);
@@ -400,6 +400,29 @@ namespace Database
 			}
 		}
 
+		public static async Task<bool> UpdateBookAuthor(int bookId, int authorId)
+		{
+			bool connected = await Connect();
+			if (!connected)
+			{
+				return false;
+			}
+
+			string sql = "UPDATE book_author SET id_author = @authorId WHERE id_book = @bookId";
+
+			using (MySqlCommand command = new MySqlCommand(sql, connection))
+			{
+				command.Parameters.AddWithValue("@authorId", authorId);
+				command.Parameters.AddWithValue("@bookId", bookId);
+
+				int rowsAffected = await command.ExecuteNonQueryAsync();
+
+				Disconnect();
+
+				return rowsAffected > 0;
+			}
+		}
+
 		public static async Task<bool> DeleteBook(int bookId)
 		{
 			//Check bridging tables if the book is there or not
@@ -637,7 +660,7 @@ namespace Database
 				if (!connected)
 				{
 					return false;
-				}
+	}
 
 				string sql = $"INSERT INTO book_reserved(id_book, id_member, status_reserved) VALUES({bookId}, {memberId}, 0);";
 
@@ -695,71 +718,71 @@ namespace Database
 
 			int bookId = 0;
 
-			using(MySqlCommand command = new MySqlCommand(sql, connection))
+			using (MySqlCommand command = new MySqlCommand(sql, connection))
 			{
-				using(MySqlDataReader reader = await command.ExecuteReaderAsync())
+				using (MySqlDataReader reader = await command.ExecuteReaderAsync())
 				{
-					while(reader.Read())
+					while (reader.Read())
 					{
 						bookId = reader.GetInt32(0);
 					}
 				}
+
+				Disconnect();
+
+				return bookId;
+			}
+		}
+
+        public static async Task<bool> DeleteReserved(int bookId, string memberId)
+        {
+			bool connected = await Connect();
+			if (!connected)
+			{
+				return false;
+			}
+
+			string sql = $"DELETE FROM book_reserved WHERE id_member = {memberId} AND id_book = {bookId};";
+
+			bool success = false;
+
+			using (MySqlCommand command = new MySqlCommand(sql, connection))
+			{
+				int rowsAffected = await command.ExecuteNonQueryAsync();
+
+				success = rowsAffected > 0;
 			}
 
 			Disconnect();
 
-			return bookId;
+			return success;
 		}
 
-		public static async Task<bool> DeleteReserved(int bookId, string memberId)
-		{
-            		bool connected = await Connect();
-            		if (!connected)
-            		{
-                		return false;
-            		}
-
-            		string sql = $"DELETE FROM book_reserved WHERE id_member = {memberId} AND id_book = {bookId};";
-
-            		bool success = false;
-
-            		using (MySqlCommand command = new MySqlCommand(sql, connection))
-            		{
-                		int rowsAffected = await command.ExecuteNonQueryAsync();
-
-                		success = rowsAffected > 0;
-            		}
-
-            		Disconnect();
-
-            		return success;
-        	}
-
 		public static async Task<bool> UpdateLoan(int bookId, string memberId)
-		{
-            		bool connected = await Connect();
-            		if (!connected)
-            		{
-                		return false;
-            		}
+	    {
+			bool connected = await Connect();
+		    if (!connected)
+	        {
+                return false;
+			}
 
-			DateTime currentTime = DateTime.Now;
-			string returnDate = currentTime.ToString("yyyy-MM-dd");
+		    DateTime currentTime = DateTime.Now;
+	        string returnDate = currentTime.ToString("yyyy-MM-dd");
 
-            		string sql = $"UPDATE loan SET return_date = '{returnDate}' WHERE id_member = {memberId} AND id_book = {bookId};";
+            string sql = $"UPDATE loan SET return_date = '{returnDate}' WHERE id_member = {memberId} AND id_book = {bookId};";
 
-            		bool success = false;
+			bool success = false;
 
-            		using (MySqlCommand command = new MySqlCommand(sql, connection))
-            		{
-                		int rowsAffected = await command.ExecuteNonQueryAsync();
+		    using (MySqlCommand command = new MySqlCommand(sql, connection))
+	        {
+                int rowsAffected = await command.ExecuteNonQueryAsync();
 
-                		success = rowsAffected > 0;
-            		}
+				success = rowsAffected > 0;
+			}
 
-            		Disconnect();
+		    Disconnect();
 
-            		return success;
-        	}
-    	}
+		        return success;
+	    }
+	}
 }

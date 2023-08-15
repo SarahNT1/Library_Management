@@ -12,10 +12,9 @@ namespace ORM
 		public int Id_category { get; set; }
 		public int Id_author { get; set; }
 		public string Title { get; set; }
-<<<<<<< HEAD
-=======
+
 		//public string Author { get; set; }
->>>>>>> main
+
 		public List<string> Authors { get; set; }
 		public string Category { get; set; }
 
@@ -36,11 +35,10 @@ namespace ORM
 		public bool IsEditing { get; set; }
 		public string EditedCategory { get; set; }
 		public int EditedQuantity { get; set; }
-<<<<<<< HEAD
-=======
+
 		public string Editedtitle { get; set; }
 		public int EditedAuthor { get; set; }
->>>>>>> main
+
 
 	}
 }
