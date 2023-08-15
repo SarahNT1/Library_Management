@@ -58,12 +58,12 @@
             }
             else
             {
-                await App.Current.MainPage.DisplayAlert("Sorry", "Loan Unsuccessful", "OK");
+                await App.Current.MainPage.DisplayAlert("Error", "Loan unsuccessful or an error occurred.", "OK");
             }
         }
         else
         {
-            await App.Current.MainPage.DisplayAlert("Sorry", "This book is unavailable or the database is unconnected.", "OK");
+            await App.Current.MainPage.DisplayAlert("Error", "This book is unavailable or an error occurred.", "OK");
         }
     }
 }

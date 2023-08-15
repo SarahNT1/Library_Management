@@ -596,54 +596,68 @@ namespace Database
 
 		public static async Task<bool> CheckAvailability(int bookId)
 		{
-            bool connected = await Connect();
-			if(!connected)
+			try
+			{
+				bool connected = await Connect();
+				if (!connected)
+				{
+					return false;
+				}
+
+				string sql = $"SELECT is_available FROM book WHERE id_book = {bookId};";
+
+				bool available = false;
+
+				using (MySqlCommand command = new MySqlCommand(sql, connection))
+				{
+					using (MySqlDataReader reader = await command.ExecuteReaderAsync())
+					{
+						while (reader.Read())
+						{
+							available = Convert.ToBoolean(reader.GetInt32(0));
+						}
+					}
+				}
+
+				Disconnect();
+
+				return available;
+			}
+			catch(Exception ex)
 			{
 				return false;
 			}
-
-			string sql = $"SELECT is_available FROM book WHERE id_book = {bookId};";
-
-			bool available = false;
-
-			using (MySqlCommand command = new MySqlCommand(sql, connection))
-			{
-				using(MySqlDataReader reader = await command.ExecuteReaderAsync())
-				{
-					while(reader.Read())
-					{
-						available = Convert.ToBoolean(reader.GetInt32(0));
-					}
-				}
-			}
-
-            Disconnect();
-
-            return available;
         }
 
 		public static async Task<bool> AddReserved(string memberId, int bookId)
 		{
-            bool connected = await Connect();
-            if (!connected)
-            {
-                return false;
-            }
+			try
+			{
+				bool connected = await Connect();
+				if (!connected)
+				{
+					return false;
+				}
 
-            string sql = $"INSERT INTO book_reserved(id_book, id_member, status_reserved) VALUES({bookId}, {memberId}, 0);";
+				string sql = $"INSERT INTO book_reserved(id_book, id_member, status_reserved) VALUES({bookId}, {memberId}, 0);";
 
-            bool success = false;
+				bool success = false;
 
-            using (MySqlCommand command = new MySqlCommand(sql, connection))
-            {
-                int rowsAffected = await command.ExecuteNonQueryAsync();
+				using (MySqlCommand command = new MySqlCommand(sql, connection))
+				{
+					int rowsAffected = await command.ExecuteNonQueryAsync();
 
-                success = rowsAffected > 0;
-            }
+					success = rowsAffected > 0;
+				}
 
-            Disconnect();
+				Disconnect();
 
-            return success;
+				return success;
+			}
+			catch(Exception ex)
+			{
+				return false;
+			}
         }
 
 		public static async Task<bool> AddLoan(string memberId, int bookId)
