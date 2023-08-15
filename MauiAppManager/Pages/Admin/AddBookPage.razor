@@ -3,6 +3,7 @@
 @using System.Data
 @using Database
 @using ORM
+@using Services
 @inject NavigationManager navigationManager
 
 <h3>Add New Book </h3>
@@ -124,7 +125,7 @@
 </table>
 
 <div class="col-md-6">
-	<button type="submit" class="btn btn-primary btn-success" @onclick="AddBookInfo">Add Book</button>
+	<button type="submit" class="btn btn-primary btn-success" @onclick="HandleAddBookInfo">Add Book</button>
 	<button type="button" class="btn btn-warning " @onclick="Clear">Clear</button>
 	<button type="button" class="btn btn-primary btn-info" @onclick="BackToMainAdmin">Back to Menu</button>
 	<button type="button" class="btn btn-primary" @onclick="LogOut">Log out</button>
@@ -169,47 +170,20 @@
 		StateHasChanged();
 	}
 
-	public async void AddBookInfo()
+	BookManagement bookManagement = new BookManagement();
+
+	private async Task HandleAddBookInfo()
 	{
-		var book = new Book();
-		var book_author = new Book_Author();
-		if(name_p != null)
+		bool result = await bookManagement.AddBookInfo(name_p, name_category, name_author, title, isbn, quantity, selectedYear, selectedMonth, selectedDay);
+
+		if (result)
 		{
-			publisherId = Convert.ToInt32(name_p);
-		}
-		if (name_category != null)
-		{
-			categoryId = Convert.ToInt32(name_category);
-		}
-
-		book.Id_publisher = publisherId;
-		book.Id_category = categoryId;
-		book.Isbn = isbn;
-		book.Title = title;
-		book.PublishDate = new DateTime(selectedYear, selectedMonth, selectedDay);
-		book.Quantity = quantity;
-
-		bool insertBookAuthor = false;
-
-		int insertedId = await DBManager.InsertBook(book);
-		if (insertedId != -1)
-		{
-			if(name_author != null)
-			{
-				authorId = Convert.ToInt32(name_author);
-				book_author.Id_author = authorId;
-				book_author.Id_book = insertedId;
-				insertBookAuthor = await DBManager.InsertBookAuthor(book_author);
-				
-				await App.Current.MainPage.DisplayAlert("Success", "Added to the database", "OK");
-
-			}
+			await App.Current.MainPage.DisplayAlert("Success", "Added to the database", "OK");
 		}
 		else
 		{
 			await App.Current.MainPage.DisplayAlert("Fail", "Error", "OK");
 		}
-		
 	}
 
 	public void Clear()
