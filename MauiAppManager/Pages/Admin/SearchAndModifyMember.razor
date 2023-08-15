@@ -206,27 +206,34 @@
 		bool emailFormat = Regex.IsMatch(member.Email_m, @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9._]+[a-zA-Z]{2,}$") ? true : false;
 		try
 		{
-			if (member.Phone_m.Length == 10 && phoneFormat && emailFormat) // if both phone number and email formats are correct
+			if (member.Street_m.Length > 0 && member.City_m.Length > 0)
 			{
-				await DBManager.UpdateMember(member.Phone_m, member.Email_m, member.Street_m, member.City_m, member.Province_m, member.Id_member); // information will be updated
-				await App.Current.MainPage.DisplayAlert("Success", $"{member.Fname_m} {member.Lname_m}'s information updated successfully.", "Done");
-				IsEditing = false;
-			}
-			else if ((member.Phone_m.Length != 10 || !phoneFormat) && emailFormat) // only for phone number format error
-			{
-				await App.Current.MainPage.DisplayAlert("Error", "Error: Phone number should be 10 digits.", "Done");
-			}
-			else if ((!emailFormat) && (member.Phone_m.Length == 10 && phoneFormat)) // only for email format error
-			{
-				await App.Current.MainPage.DisplayAlert("Error", "Error: Email's format error.", "Done");
-			}
-			else if ((member.Phone_m.Length != 10 || !phoneFormat) && !emailFormat)  // for both phone number and email error
-			{
-				await App.Current.MainPage.DisplayAlert("Error", "Error: Please check phone number and email formats.", "Done");
+				if (member.Phone_m.Length == 10 && phoneFormat && emailFormat) // if both phone number and email formats are correct
+				{
+					await DBManager.UpdateMember(member.Phone_m, member.Email_m, member.Street_m, member.City_m, member.Province_m, member.Id_member); // information will be updated
+					await App.Current.MainPage.DisplayAlert("Success", $"{member.Fname_m} {member.Lname_m}'s information updated successfully.", "Done");
+					IsEditing = false;
+				}
+				else if ((member.Phone_m.Length != 10 || !phoneFormat) && emailFormat) // only for phone number format error
+				{
+					await App.Current.MainPage.DisplayAlert("Error", "Error: Phone number should be 10 digits.", "Done");
+				}
+				else if ((!emailFormat) && (member.Phone_m.Length == 10 && phoneFormat)) // only for email format error
+				{
+					await App.Current.MainPage.DisplayAlert("Error", "Error: Email's format error.", "Done");
+				}
+				else if ((member.Phone_m.Length != 10 || !phoneFormat) && !emailFormat)  // for both phone number and email error
+				{
+					await App.Current.MainPage.DisplayAlert("Error", "Error: Please check phone number and email formats.", "Done");
+				}
+				else
+				{
+					throw new Exception();
+				}
 			}
 			else
 			{
-				throw new Exception();
+				await App.Current.MainPage.DisplayAlert("Error", "Error: Please check address.", "Done");
 			}
 		}
 		catch(Exception ex) // if email are same as others, will show this error. (Because email should be unique)
