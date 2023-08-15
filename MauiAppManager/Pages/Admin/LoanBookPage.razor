@@ -37,7 +37,7 @@
 @code {
     public static SearchResultBook books { get; set; }
     private string memberIdInput;
-    private bool successful = false;
+    private bool successfulLoan = false;
 
     public async void CancelLoan()
     {
@@ -53,10 +53,11 @@
             if(isAvailable)
             {
                 bool success = await DBManager.AddReserved(memberIdInput, books.Id_book);
-                successful = await DBManager.AddLoan(memberIdInput, books.Id_book);
+                successfulLoan = await DBManager.AddLoan(memberIdInput, books.Id_book);
 
-                if (successful)
+                if (successfulLoan)
                 {
+                    bool succesfulQuan = await DBManager.UpdateQuantityLoan(books.Id_book);
                     await App.Current.MainPage.DisplayAlert("Sucess", "Book Loaned", "OK");
                 }
                 else

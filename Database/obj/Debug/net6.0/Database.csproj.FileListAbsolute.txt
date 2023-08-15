@@ -58,3 +58,18 @@ C:\Users\jiyeo\OneDrive\Desktop\CPRG211_B\z_Final\Library_Management\Database\ob
 C:\Users\jiyeo\OneDrive\Desktop\CPRG211_B\z_Final\Library_Management\Database\obj\Debug\net6.0\refint\Database.dll
 C:\Users\jiyeo\OneDrive\Desktop\CPRG211_B\z_Final\Library_Management\Database\obj\Debug\net6.0\Database.pdb
 C:\Users\jiyeo\OneDrive\Desktop\CPRG211_B\z_Final\Library_Management\Database\obj\Debug\net6.0\ref\Database.dll
+C:\Visual Studio - MAUI\SAITSem2Final_CloneRep\Library_Management\Database\bin\Debug\net6.0\Database.deps.json
+C:\Visual Studio - MAUI\SAITSem2Final_CloneRep\Library_Management\Database\bin\Debug\net6.0\Database.dll
+C:\Visual Studio - MAUI\SAITSem2Final_CloneRep\Library_Management\Database\bin\Debug\net6.0\Database.pdb
+C:\Visual Studio - MAUI\SAITSem2Final_CloneRep\Library_Management\Database\bin\Debug\net6.0\ORM.dll
+C:\Visual Studio - MAUI\SAITSem2Final_CloneRep\Library_Management\Database\bin\Debug\net6.0\ORM.pdb
+C:\Visual Studio - MAUI\SAITSem2Final_CloneRep\Library_Management\Database\obj\Debug\net6.0\Database.csproj.AssemblyReference.cache
+C:\Visual Studio - MAUI\SAITSem2Final_CloneRep\Library_Management\Database\obj\Debug\net6.0\Database.GeneratedMSBuildEditorConfig.editorconfig
+C:\Visual Studio - MAUI\SAITSem2Final_CloneRep\Library_Management\Database\obj\Debug\net6.0\Database.AssemblyInfoInputs.cache
+C:\Visual Studio - MAUI\SAITSem2Final_CloneRep\Library_Management\Database\obj\Debug\net6.0\Database.AssemblyInfo.cs
+C:\Visual Studio - MAUI\SAITSem2Final_CloneRep\Library_Management\Database\obj\Debug\net6.0\Database.csproj.CoreCompileInputs.cache
+C:\Visual Studio - MAUI\SAITSem2Final_CloneRep\Library_Management\Database\obj\Debug\net6.0\Database.csproj.CopyComplete
+C:\Visual Studio - MAUI\SAITSem2Final_CloneRep\Library_Management\Database\obj\Debug\net6.0\Database.dll
+C:\Visual Studio - MAUI\SAITSem2Final_CloneRep\Library_Management\Database\obj\Debug\net6.0\refint\Database.dll
+C:\Visual Studio - MAUI\SAITSem2Final_CloneRep\Library_Management\Database\obj\Debug\net6.0\Database.pdb
+C:\Visual Studio - MAUI\SAITSem2Final_CloneRep\Library_Management\Database\obj\Debug\net6.0\ref\Database.dll

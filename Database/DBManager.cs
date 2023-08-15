@@ -25,7 +25,7 @@ namespace Database
 				Server = "localhost",
 				Database = "cprg211",
 				UserID = "root",
-				Password = "root",
+				Password = "0rb3n3tAngakongpassword!",
 			};
 
 			connection = new MySqlConnection(builder.ConnectionString);
@@ -711,12 +711,11 @@ namespace Database
 
 		}
 
-		/*<summary>
-		 * This method is to check if the book that
-		 * the user wants to loan is available or not.
-		 * It is ran before the method that updates
-		 * the database.
-		 </summary>*/
+		/// <summary>
+		/// Check book Availability
+		/// </summary>
+		/// <param name="bookId">The book Id</param>
+		/// <returns>True if it is available.</returns>
 		public static async Task<bool> CheckAvailability(int bookId)
 		{
 			try
@@ -750,13 +749,14 @@ namespace Database
 			{
 				return false;
 			}
-        	}
+        }
 
-		/*<summary>
-		 * This method adds a row in the book_reserved
-		 * table to keep track of the books that have
-		 * been reserved/loaned by the members.
-		 </summary>*/
+		/// <summary>
+		/// Adds a book_reserved row
+		/// </summary>
+		/// <param name="memberId">Members Id</param>
+		/// <param name="bookId">The book Id</param>
+		/// <returns>True if it added successfully.</returns>
 		public static async Task<bool> AddReserved(string memberId, int bookId)
 		{
 			try
@@ -786,20 +786,98 @@ namespace Database
 			{
 				return false;
 			}
-        	}
+        }
 
-		/*<summary>
-		 * This, after the method above, adds a row
-		 * to the loan database to show when the user
-		 * loaned the book.
-		 </summary>*/
+		/// <summary>
+		/// Update book quantity
+		/// </summary>
+		/// <param name="bookId">The book Id</param>
+		/// <returns>True if it updated successfully.</returns>
+		public static async Task<bool> UpdateQuantityLoan(int bookId)
+		{
+			try
+			{
+				bool connected = await Connect();
+				if (!connected)
+				{
+					return false;
+				}
+				//Get quantity - 1
+				bool success = false;
+				int quantity = 0;
+
+				string sqlCurrent = $"SELECT quantity FROM book WHERE id_book = {bookId};";
+
+				using (MySqlCommand commandCurrent = new MySqlCommand(sqlCurrent, connection))
+				{
+					using (MySqlDataReader reader = await commandCurrent.ExecuteReaderAsync())
+					{
+						while (reader.Read())
+						{
+							quantity = reader.GetInt32(0);
+						}
+						quantity--;
+					}
+				}
+
+				Disconnect();
+
+                //Update Quantity 
+                connected = await Connect();
+                if (!connected)
+                {
+                    return false;
+                }
+
+                string sql = $"UPDATE book SET quantity = {quantity} WHERE id_book = {bookId};";
+
+				using (MySqlCommand command = new MySqlCommand(sql, connection))
+				{
+					int rowsAffected = await command.ExecuteNonQueryAsync();
+
+					success = rowsAffected > 0;
+				}
+
+                Disconnect();
+
+                if (quantity == 0)
+				{
+                    connected = await Connect();
+                    if (!connected)
+                    {
+                        return false;
+                    }
+
+					string sqlAvailability = $"UPDATE book SET is_available = 0 WHERE id_book = {bookId};";
+
+					using(MySqlCommand command = new MySqlCommand( sqlAvailability, connection))
+					{
+						await command.ExecuteNonQueryAsync();
+					}
+                    Disconnect();
+                }
+
+				return success;
+			}
+			catch (Exception ex)
+			{
+				return false;
+			}
+		}
+
+		/// <summary>
+		/// Adds loan
+		/// </summary>
+		/// <param name="memberId">Member's Id</param>
+		/// <param name="bookId">The book Id</param>
+		/// <returns>True if it updated successfully.</returns>
 		public static async Task<bool> AddLoan(string memberId, int bookId)
 		{
-            		bool connected = await Connect();
-            		if (!connected)
-            		{
-                		return false;
-            		}
+            bool connected = await Connect();
+          	if (!connected)
+          	{
+              	return false;
+            }
 
 			DateTime currentDate = DateTime.Now;
 			string startDate = currentDate.ToString("yyyy-MM-dd");
@@ -815,15 +893,16 @@ namespace Database
 				success = rowsAffected > 0;
 			}
 
-            		Disconnect();
+          	Disconnect();
 
-            		return success;
-        	}
+           	return success;
+        }
 
-		/*<summary>
-		 * This finds the book id using the book title 
-		 * for when the user wants to return the book.
-		 </summary>*/
+		/// <summary>
+		/// Find books Id
+		/// </summary>
+		/// <param name="bookTitle">The book title</param>
+		/// <returns>Book Id(int) if found.</returns>
 		public static async Task<int> FindBookId(string bookTitle)
 		{
 			bool connected = await Connect();
@@ -848,13 +927,89 @@ namespace Database
 			}
 		}
 
-		/*<summary>
-		 * This method then deletes the book_reserved row
-		 * for the book that was returned. It shows that the
-		 * book is currently not reserved and the user is 
-		 * currently not reserving that book.
-		 </summary>*/
-        public static async Task<bool> DeleteReserved(int bookId, string memberId)
+		/// <summary>
+		/// Update book quantity(+1)
+		/// </summary>
+		/// <param name="bookId">The book Id</param>
+		/// <returns>True if it updated successfully.</returns>
+		public static async Task<bool> UpdateQuantityReturn(int bookId)
+		{
+			try
+			{
+				bool connected = await Connect();
+				if (!connected)
+				{
+					return false;
+				}
+				//Get quantity + 1
+				bool success = false;
+				int quantity = 0;
+
+				string sqlCurrent = $"SELECT quantity FROM book WHERE id_book = {bookId};";
+
+				using (MySqlCommand commandCurrent = new MySqlCommand(sqlCurrent, connection))
+				{
+					using (MySqlDataReader reader = await commandCurrent.ExecuteReaderAsync())
+					{
+						while (reader.Read())
+						{
+							quantity = reader.GetInt32(0);
+						}
+					}
+				}
+
+				Disconnect();
+
+				if (quantity == 0)
+				{
+                    connected = await Connect();
+                    if (!connected)
+                    {
+                        return false;
+                    }
+
+                    string sqlAvailability = $"UPDATE book SET is_available = 1 WHERE id_book = {bookId};";
+
+                    using (MySqlCommand command = new MySqlCommand(sqlAvailability, connection))
+                    {
+                        await command.ExecuteNonQueryAsync();
+                    }
+					Disconnect();
+                }
+
+                //Update Quantity 
+                connected = await Connect();
+                if (!connected)
+                {
+                    return false;
+                }
+
+                string sql = $"UPDATE book SET quantity = {quantity + 1} WHERE id_book = {bookId};";
+
+				using (MySqlCommand command = new MySqlCommand(sql, connection))
+				{
+					int rowsAffected = await command.ExecuteNonQueryAsync();
+
+					success = rowsAffected > 0;
+				}
+
+				Disconnect();
+
+				return success;
+			}
+			catch (Exception ex)
+			{
+				return false;
+			}
+		}
+
+		/// <summary>
+		/// Update book quantity
+		/// </summary>
+		/// <param name="bookId">The book Id</param>
+		/// <param name="memberId">Member's Id</param>
+		/// <returns>True if it updated successfully.</returns>
+		public static async Task<bool> DeleteReserved(int bookId, string memberId)
         {
 			bool connected = await Connect();
 			if (!connected)
@@ -878,10 +1033,12 @@ namespace Database
 			return success;
 		}
 
-		/*<summary>
-		 * This method updates the row of the book that was returned,
-		 * now saving the date that the book was returned.
-		 </summary>*/
+		/// <summary>
+		/// Update book quantity
+		/// </summary>
+		/// <param name="bookId">The book Id</param>
+		/// <param name="memberId">Member's Id</param>
+		/// <returns>True if it updated successfully.</returns>
 		public static async Task<bool> UpdateLoan(int bookId, string memberId)
 	    {
 			bool connected = await Connect();
@@ -906,7 +1063,7 @@ namespace Database
 
 		    Disconnect();
 
-		        return success;
+			return success;
 	    }
 		
 		/// <summary>

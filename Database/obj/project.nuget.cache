@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "Eq1hiOoVnBw1KyRZosTV7X9s8VEaHhjXnTqYZQvCEBopyRk0yeReJYj75uX6Wig2Ac2tjeYTeJlX64aM0lVJ4A==",
+  "dgSpecHash": "3S3s2YB6vL5HdFWrWcInIkckVAO20R1vQ0tWBSPLRy3b5LECoCEitU7yaxdZ0LtnOxcJYVRa+/02No0MeQAUzg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\jiyeo\\OneDrive\\Desktop\\CPRG211_B\\z_Final\\Library_Management\\Database\\Database.csproj",
+  "projectFilePath": "C:\\Visual Studio - MAUI\\SAITSem2Final_CloneRep\\Library_Management\\Database\\Database.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\jiyeo\\.nuget\\packages\\mysqlconnector\\2.2.7\\mysqlconnector.2.2.7.nupkg.sha512"
+    "C:\\Users\\SNPOR\\.nuget\\packages\\mysqlconnector\\2.2.7\\mysqlconnector.2.2.7.nupkg.sha512"
   ],
   "logs": []
 }
