@@ -215,7 +215,7 @@
 			{
 				await App.Current.MainPage.DisplayAlert("Error", "Error: Phone number should be 10 digits.", "Done");
 			}
-			else if ((!emailFormat) && (member.Phone_m.Length != 10 || !phoneFormat)) // only for email format error
+			else if ((!emailFormat) && (member.Phone_m.Length == 10 && phoneFormat)) // only for email format error
 			{
 				await App.Current.MainPage.DisplayAlert("Error", "Error: Email's format error.", "Done");
 			}
@@ -230,7 +230,7 @@
 		}
 		catch(Exception ex) // if email are same as others, will show this error. (Because email should be unique)
 		{
-			await App.Current.MainPage.DisplayAlert("Error", $"Error: {ex.Message}", "Done");
+			await App.Current.MainPage.DisplayAlert("Error", $"Error: Email cannot be updated. \n{ex.Message}", "Done");
 		}
 	}
 	// Cancel editing member, the change will not be saved.
