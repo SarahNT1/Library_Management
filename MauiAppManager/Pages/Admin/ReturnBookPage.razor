@@ -55,6 +55,7 @@
             if(returned)
             {
                 bool loanUpdated = await DBManager.UpdateLoan(bookIdReturn, returnMemberId);
+                bool quantityUpdate = await DBManager.UpdateQuantityReturn(bookIdReturn);
 
                 await App.Current.MainPage.DisplayAlert("Success", "This book has been returned.", "OK");
             }
