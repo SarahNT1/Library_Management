@@ -3,6 +3,7 @@
 @using System.Data
 @using Database
 @using ORM
+@using Services
 @inject NavigationManager navigationManager
 
 <h3>AddMemberPage</h3>
@@ -70,7 +71,6 @@
 				</select>
 				@if (selectedDomain == "")
 				{
-					<span class="separator">.</span>
 					<input type="text" @bind="customDomain" class="form-control" placeholder="Custom Domain" />
 				}
 			</td>
@@ -107,7 +107,7 @@
 		<tr>
 			<th></th>
 			<td colspan="3">
-				<button type="submit" class="btn btn-primary btn-success" @onclick="AddMemberInfo">Add</button>
+				<button type="submit" class="btn btn-primary btn-success" @onclick="HandleAddMemberInfo">Add</button>
 				<button type="button" class="btn btn-primary btn-info" @onclick="BackToMainAdmin">Back</button>
 				<button type="button" class="btn btn-warning " @onclick="Clear">Clear</button></td>
 		</tr>
@@ -193,11 +193,19 @@
 						int.TryParse(phonePart1, out _) && int.TryParse(phonePart2, out _) && int.TryParse(phonePart3, out _);
 	}
 
+	public string FormattedEmailAddress;
 	private bool IsEmailAddressValid()
 	{
 		bool isValidDomain = selectedDomain == "gmail.com" || selectedDomain == "yahoo.com" || selectedDomain == "sait.ca";
 		bool isValidCustomDomain = !string.IsNullOrEmpty(customDomain);
-
+		if (isValidDomain)
+		{
+			FormattedEmailAddress = $"{emailPrefix}@{selectedDomain}";
+		}
+		else if (isValidCustomDomain)
+		{
+			FormattedEmailAddress = $"{emailPrefix}@{customDomain}";
+		}
 		return !string.IsNullOrEmpty(emailPrefix) &&
 						(isValidDomain || isValidCustomDomain);
 	}
@@ -205,9 +213,8 @@
 
 	public string FormattedPhoneNumber => $"{phonePart1}{phonePart2}{phonePart3}";
 
-	public string FormattedEmailAddress => IsEmailAddressValid() ? $"{emailPrefix}@{customDomain}" : $"{emailPrefix}@{selectedDomain}";
-
-	public async void AddMemberInfo()
+	MemberManagement memberManagement = new MemberManagement();
+	private async Task HandleAddMemberInfo()
 	{
 		if (!verifiedID) { await App.Current.MainPage.DisplayAlert("Check your ID", "Click the check button", "OK"); }
 		else if (!verifiedPassword) { await App.Current.MainPage.DisplayAlert("Check your Password", "Click the check button", "OK"); }
@@ -226,32 +233,32 @@
 			!string.IsNullOrEmpty(street) &&
 			!string.IsNullOrEmpty(city) &&
 			!string.IsNullOrEmpty(province))
+		{
+			var member = new Member
+				{
+					Login_m = login_m,
+					Password_m = password,
+					Fname_m = firstname,
+					Lname_m = lastname,
+					Phone_m = FormattedPhoneNumber,
+					Email_m = FormattedEmailAddress,
+					Street_m = street,
+					City_m = city,
+					Province_m = province
+				};
+
+			bool success = await memberManagement.AddMemberInfo(member);
+
+			if (success)
 			{
-				var member = new Member
-					{
-						Login_m = login_m,
-						Password_m = password,
-						Fname_m = firstname,
-						Lname_m = lastname,
-						Phone_m = FormattedPhoneNumber,
-						Email_m = FormattedEmailAddress,
-						Street_m = street,
-						City_m = city,
-						Province_m = province
-					};
-
-				bool success = await DBManager.AddMember(member);
-
-				if (success)
-				{
-					// Member added successfully, show a success message
-					await App.Current.MainPage.DisplayAlert("Success", "Member information added.", "OK");
-				}
-				else
-				{
-					// Failed to add member info, show an error message
-					await App.Current.MainPage.DisplayAlert("Error", "Failed to add member information.", "OK");
-				}
+				// Member added successfully, show a success message
+				await App.Current.MainPage.DisplayAlert("Success", "Member information added.", "OK");
+			}
+			else
+			{
+				// Failed to add member info, show an error message
+				await App.Current.MainPage.DisplayAlert("Error", "Failed to add member information.", "OK");
+			}
 
 		}
 		else
