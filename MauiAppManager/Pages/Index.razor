@@ -72,23 +72,14 @@
 	// Log in for administrator
 	public async void AdminLogin()
 	{
-		bool IsConnected = DBManager.IsConnected();
-		if (id_login == "admin" && password_login == "1234") // check the log in information
+		if (IsConnected) // check id and password
 		{
-			if (IsConnected) // check the connection of database works properly
-			{
-				IsAdmin = true;
-				navigationManager.NavigateTo($"/mainAdmin/");
-			}
-			else
-			{
-				await App.Current.MainPage.DisplayAlert("Error", "Check the connection of database as Administrator", "OK");
-			}
-
+			IsAdmin = true;
+			navigationManager.NavigateTo($"/mainAdmin/");
 		}
 		else
 		{
-			await App.Current.MainPage.DisplayAlert("Error", "Check your id or password as Administrator", "OK");
+			await App.Current.MainPage.DisplayAlert("Error", "Check id or password as Administrator", "OK");
 		}
 	}
 
