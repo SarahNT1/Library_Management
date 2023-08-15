@@ -147,7 +147,7 @@
 	private int selectedDay = DateTime.Now.Day;
 
 	private string title;
-	private string isbn;
+	private string isbn = "";
 	private int quantity;
 
 	private string name_p;
@@ -181,16 +181,29 @@
 	//It pass the book information to Bookmanagement.cs in the service forder.
 	private async Task HandleAddBookInfo()
 	{
-		bool result = await bookManagement.AddBookInfo(name_p, name_category, name_author, title, isbn, quantity, selectedYear, selectedMonth, selectedDay);
-
-		if (result)
+		if (quantity > 0 && title != null && isbn != null)
 		{
-			await App.Current.MainPage.DisplayAlert("Success", "Added to the database", "OK");
+			bool result = await bookManagement.AddBookInfo(name_p, name_category, name_author, title, isbn, quantity, selectedYear, selectedMonth, selectedDay);
+
+			if (result)
+			{
+				await App.Current.MainPage.DisplayAlert("Success", "Added to the database", "OK");
+			}
+			else
+			{
+				await App.Current.MainPage.DisplayAlert("Fail", "Error", "OK");
+			}
+
+		}
+		else if (isbn.Length != 13)
+		{
+			await App.Current.MainPage.DisplayAlert("Fail", "ISBN should be 13 digits, and required", "OK");
 		}
 		else
 		{
-			await App.Current.MainPage.DisplayAlert("Fail", "Error", "OK");
+			await App.Current.MainPage.DisplayAlert("Fail", "Title required, and Quantity should be more than 0.", "OK");
 		}
+
 	}
 
 	//Clear all information after adding
