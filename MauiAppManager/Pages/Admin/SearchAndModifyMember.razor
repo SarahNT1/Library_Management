@@ -200,8 +200,7 @@
 	//Save Edit Member
 	public async Task SaveEdit(Member member)
 	{
-
-		bool phoneFormat = int.TryParse(member.Phone_m, out int result);
+		bool phoneFormat = Regex.IsMatch(member.Phone_m, @"^[0-9]{10}$");
 		bool emailFormat = Regex.IsMatch(member.Email_m, @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9._]+[a-zA-Z]{2,}$") ? true : false;
 		try
 		{
@@ -213,15 +212,15 @@
 					await App.Current.MainPage.DisplayAlert("Success", $"{member.Fname_m} {member.Lname_m}'s information updated successfully.", "Done");
 					IsEditing = false;
 				}
-				else if ((member.Phone_m.Length != 10 || !phoneFormat) && emailFormat) // only for phone number format error
+				else if (!phoneFormat && emailFormat) // only for phone number format error
 				{
 					await App.Current.MainPage.DisplayAlert("Error", "Error: Phone number should be 10 digits.", "Done");
 				}
-				else if ((!emailFormat) && (member.Phone_m.Length == 10 && phoneFormat)) // only for email format error
+				else if (!emailFormat && phoneFormat) // only for email format error
 				{
 					await App.Current.MainPage.DisplayAlert("Error", "Error: Email's format error.", "Done");
 				}
-				else if ((member.Phone_m.Length != 10 || !phoneFormat) && !emailFormat)  // for both phone number and email error
+				else if (!phoneFormat && !emailFormat)  // for both phone number and email error
 				{
 					await App.Current.MainPage.DisplayAlert("Error", "Error: Please check phone number and email formats.", "Done");
 				}
